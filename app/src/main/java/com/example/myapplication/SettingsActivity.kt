@@ -1,5 +1,7 @@
 package com.example.myapplication
 import PanelHeader
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +26,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 //import com.example.myapplication.ui.theme.rememberThemeState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 
 class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +63,7 @@ class SettingsActivity : ComponentActivity() {
 @Composable
 fun SettingsColumn() {
     //val (isDark, toggleTheme) = rememberThemeState()
+    val context = LocalContext.current
     var isDark by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize()
@@ -72,7 +76,12 @@ fun SettingsColumn() {
         SettingsColumnItem(
             text = "Поделиться приложением",
             icon = Icons.Default.Share,
-            onClick = {}
+            onClick = {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "http://PlaylistMaker.com")
+                context.startActivity(shareIntent)
+            }
         )
         SettingsColumnItem(
             text = "Пользовательское соглашение",
