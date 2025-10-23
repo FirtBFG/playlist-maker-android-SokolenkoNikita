@@ -13,4 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val Blue40 = Color(0xFF3772E7)
 val Blue30 = Blue40.copy(alpha = 0.48f)
 
+val YPLightGray = Color(0xFFE6E8EB)
+val YPTextGray = Color(0xFFAEAFB4)
+
 

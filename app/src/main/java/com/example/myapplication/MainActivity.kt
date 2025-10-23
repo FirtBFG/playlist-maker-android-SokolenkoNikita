@@ -74,11 +74,9 @@ fun MainMenu() {
                 icon = Icons.Default.Search,
                 text = "Поиск",
                 onClick = {
-                    Toast.makeText(
-                    context,
-                    "Нажата кнопка \"Поиск\"",
-                    Toast.LENGTH_SHORT
-                    ).show()
+                    val searchIntent = Intent(context, SearchActivity::class.java)
+                    searchIntent.putExtra("label", "Поиск")
+                    context.startActivity(searchIntent)
                 }
             )
             MenuColumnItem(
