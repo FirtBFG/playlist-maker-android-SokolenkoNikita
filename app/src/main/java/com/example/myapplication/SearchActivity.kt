@@ -68,11 +68,12 @@ class SearchActivity : ComponentActivity() {
                         .fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.surface
                 ) { innerPadding ->
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                    ) {
                         PanelHeader(
                             title = label,
-                            modifier = Modifier
-                                .padding(innerPadding),
                             isBackButton = true,
                             onBackPressed = { onBackPressedDispatcher.onBackPressed() }
                         )

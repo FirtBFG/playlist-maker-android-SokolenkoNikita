@@ -45,10 +45,11 @@ class MainActivity : ComponentActivity() {
                     .fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
-                    Column {
+                    Column (
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
                         PanelHeader(
                             title = stringResource(R.string.app_name),
-                            modifier = Modifier.padding(innerPadding)
                         )
                         MainMenu()
                     }
@@ -63,7 +64,7 @@ fun MainMenu() {
     val context = LocalContext.current
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 16.dp)
