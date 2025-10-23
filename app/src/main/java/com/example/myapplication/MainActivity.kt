@@ -13,12 +13,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,7 +34,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.components.MainPanelHeader
 import com.example.myapplication.ui.components.MenuColumnItem
+import com.example.myapplication.ui.theme.Blue40
 import com.example.myapplication.ui.theme.MyApplicationTheme
 // import com.example.myapplication.ui.theme.rememberThemeState
 
@@ -43,14 +54,16 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier
                     .fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.background,
+                    topBar = {
+                        MainPanelHeader(
+                            title = stringResource(id = R.string.app_name)
+                        )
+                    },
                 ) { innerPadding ->
                     Column (
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        PanelHeader(
-                            title = stringResource(R.string.app_name),
-                        )
                         MainMenu()
                     }
                 }
@@ -59,11 +72,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun MainMenu() {
     val context = LocalContext.current
     Box(
         modifier = Modifier
+            .padding(top = 14.dp)
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
@@ -119,7 +134,7 @@ fun MainMenu() {
 @Composable
 fun PanelHeaderPreview() {
     MyApplicationTheme(darkTheme = false) {
-        PanelHeader(stringResource(R.string.app_name))
+        MainPanelHeader(stringResource(R.string.app_name))
     }
 }
 
@@ -127,7 +142,7 @@ fun PanelHeaderPreview() {
 @Composable
 fun PanelHeaderPreview2() {
     MyApplicationTheme(darkTheme = false) {
-        PanelHeader(stringResource(R.string.app_name), isBackButton = true)
+        PanelHeader(stringResource(R.string.app_name), onClickAction = {})
     }
 }
 

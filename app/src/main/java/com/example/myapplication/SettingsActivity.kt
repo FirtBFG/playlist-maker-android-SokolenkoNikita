@@ -38,17 +38,17 @@ class SettingsActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    topBar = {
+                        PanelHeader(
+                            title = "Настройки", onClickAction = {onBackPressedDispatcher.onBackPressed()}
+                        )
+                    }
                 ) { innerPadding ->
                     Column (
                         modifier = Modifier
                             .padding(innerPadding),
                     ) {
-                        PanelHeader(
-                            title = label,
-                            isBackButton = true,
-                            onBackPressed = { onBackPressedDispatcher.onBackPressed() }
-                        )
                         SettingsColumn()
                     }
                 }
@@ -92,8 +92,7 @@ fun SettingsColumn() {
 @Composable
 fun PanelHeaderPreview3() {
     PanelHeader(title = "label",
-        isBackButton = true,
-        onBackPressed = {}
+        onClickAction = {}
     )
 }
 

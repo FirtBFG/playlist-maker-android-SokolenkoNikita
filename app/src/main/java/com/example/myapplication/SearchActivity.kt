@@ -3,6 +3,7 @@ package com.example.myapplication
 import PanelHeader
 import android.R.attr.label
 import android.R.attr.maxLines
+import android.R.attr.navigationIcon
 import android.os.Bundle
 import android.text.TextUtils.isEmpty
 import androidx.activity.ComponentActivity
@@ -24,15 +25,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.YPLightGray
 import com.example.myapplication.ui.theme.YPTextGray
 
+
 class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,17 +73,17 @@ class SearchActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    topBar = {
+                        PanelHeader(
+                            title = "Поиск", onClickAction = {onBackPressedDispatcher.onBackPressed()}
+                        )
+                    }
                 ) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .padding(innerPadding)
                     ) {
-                        PanelHeader(
-                            title = label,
-                            isBackButton = true,
-                            onBackPressed = { onBackPressedDispatcher.onBackPressed() }
-                        )
                         PanelSearch()
                     }
                 }
@@ -84,6 +91,8 @@ class SearchActivity : ComponentActivity() {
         }
     }
 }
+
+
 
 
 @Composable
