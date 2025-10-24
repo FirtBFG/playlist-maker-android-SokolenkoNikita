@@ -33,10 +33,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.YPLightGray
 import com.example.myapplication.ui.theme.YPTextGray
+import com.example.myapplication.R
 
 
 class SearchActivity : ComponentActivity() {
@@ -44,7 +46,6 @@ class SearchActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val label = intent.getStringExtra("label") ?: ""
             MyApplicationTheme(
                 darkTheme = false
             ) {
@@ -54,7 +55,8 @@ class SearchActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.surface,
                     topBar = {
                         PanelHeader(
-                            title = "Поиск", onClickAction = {onBackPressedDispatcher.onBackPressed()}
+                            title = stringResource(id = R.string.title_activity_search),
+                            onClickAction = {onBackPressedDispatcher.onBackPressed()}
                         )
                     }
                 ) { innerPadding ->
@@ -94,7 +96,7 @@ fun PanelSearch() {
             },
             placeholder = {
                 Text(
-                    "Поиск",
+                    stringResource(id = R.string.search),
                     color = YPTextGray,
                     fontSize = 16.sp
                 )

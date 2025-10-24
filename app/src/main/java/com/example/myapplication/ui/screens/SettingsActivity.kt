@@ -26,6 +26,9 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
+import com.example.myapplication.R
 import com.example.myapplication.ui.viewModel.SettingsViewModel
 
 class SettingsActivity : ComponentActivity() {
@@ -37,7 +40,6 @@ class SettingsActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             //val (isDark, toggleTheme) = rememberThemeState()
-            val label = intent.getStringExtra("label") ?: "Настройки"
             MyApplicationTheme(
                 darkTheme = false
             ) {
@@ -47,7 +49,8 @@ class SettingsActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.surface,
                     topBar = {
                         PanelHeader(
-                            title = "Настройки", onClickAction = {onBackPressedDispatcher.onBackPressed()}
+                            title = stringResource(id = R.string.title_activity_settings),
+                            onClickAction = {onBackPressedDispatcher.onBackPressed()}
                         )
                     }
                 ) { innerPadding ->
@@ -67,34 +70,51 @@ class SettingsActivity : ComponentActivity() {
 fun SettingsColumn(viewModel: SettingsViewModel) {
     //val (isDark, toggleTheme) = rememberThemeState()
     val context = LocalContext.current
+    val shareAppText = stringResource(id = R.string.share_app)
+    val typeSupportText = stringResource(id = R.string.type_support)
+    val titleSupportText = stringResource(id = R.string.support_mail_title)
+    val supportEmail = stringResource(id = R.string.support_mail_text)
+    val offerRef = stringResource(id = R.string.offer_ref).toUri()
+
     var isDark by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize()
     ){
         ToggleThemeColumnItem(
-            text = "Тёмная тема",
+            text = stringResource(id = R.string.black_theme),
             isDark = isDark,
             onCheckedChange = {isDark = !isDark},
         )
         SettingsColumnItem(
-            text = "Поделиться приложением",
+            text = stringResource(id = R.string.share_app),
             icon = Icons.Default.Share,
             onClick = {
-                viewModel.onShare(context)
+                viewModel.onShare(
+                    context = context,
+                    text = shareAppText,
+                )
             }
         )
         SettingsColumnItem(
-            text = "Написать в поддержку",
+            text = stringResource(id = R.string.type_support),
             icon = Icons.Default.SupportAgent,
             onClick = {
-                viewModel.onHelp(context)
+                viewModel.onHelp(
+                    context,
+                    text = typeSupportText,
+                    title = titleSupportText,
+                    email = supportEmail
+                )
             }
         )
         SettingsColumnItem(
-            text = "Пользовательское соглашение",
+            text = stringResource(id = R.string.user_offer),
             icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
             onClick = {
-                viewModel.onOffer(context)
+                viewModel.onOffer(
+                    context,
+                    ref = offerRef
+                )
             }
         )
     }

@@ -2,30 +2,31 @@ package com.example.myapplication.ui.viewModel
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 
 class SettingsViewModel : ViewModel() {
 
-    fun onShare(context: Context) {
+    fun onShare(context: Context, text: String) {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://PlaylistMaker.com")
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
         context.startActivity(shareIntent)
     }
 
-    fun onHelp(context: Context) {
+    fun onHelp(context: Context, email: String, title: String, text: String) {
         val helpIntent = Intent(Intent.ACTION_SENDTO)
         helpIntent.data = "mailto:".toUri()
-        helpIntent.putExtra(Intent.EXTRA_EMAIL, "nsokolenko@sfedu.ru")
-        helpIntent.putExtra(Intent.EXTRA_TITLE, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
-        helpIntent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
+        helpIntent.putExtra(Intent.EXTRA_EMAIL, email)
+        helpIntent.putExtra(Intent.EXTRA_TITLE, title)
+        helpIntent.putExtra(Intent.EXTRA_TEXT, text)
         context.startActivity(helpIntent)
     }
 
-    fun onOffer(context: Context) {
+    fun onOffer(context: Context, ref: Uri) {
         val offerIntent = Intent(Intent.ACTION_VIEW)
-        offerIntent.data = "https://yandex.ru/legal/praktikum_offer/07022019/".toUri()
+        offerIntent.data = ref
         context.startActivity(offerIntent)
     }
 

@@ -81,10 +81,9 @@ fun MainMenu() {
         Column {
             MenuColumnItem(
                 icon = Icons.Default.Search,
-                text = "Поиск",
+                text = stringResource(id = R.string.title_activity_search),
                 onClick = {
                     val searchIntent = Intent(context, SearchActivity::class.java)
-                    searchIntent.putExtra("label", "Поиск")
                     context.startActivity(searchIntent)
                 }
             )
@@ -112,10 +111,9 @@ fun MainMenu() {
             )
             MenuColumnItem(
                 icon = Icons.Default.Settings,
-                text = "Настройки",
+                text = stringResource(id = R.string.title_activity_settings),
                 onClick = {
                     val settingsIntent = Intent(context, SettingsActivity::class.java)
-                    settingsIntent.putExtra("lable", "Настройки")
                     context.startActivity(settingsIntent)
                 }
             )
