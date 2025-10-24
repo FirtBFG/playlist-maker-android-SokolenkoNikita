@@ -1,11 +1,10 @@
-package com.example.myapplication
+package com.example.myapplication.ui.screens
 import PanelHeader
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,8 +26,12 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.myapplication.ui.viewModel.SettingsViewModel
 
 class SettingsActivity : ComponentActivity() {
+    private val settingsViewModel by viewModels<SettingsViewModel>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,7 +55,7 @@ class SettingsActivity : ComponentActivity() {
                         modifier = Modifier
                             .padding(innerPadding),
                     ) {
-                        SettingsColumn()
+                        SettingsColumn(viewModel = settingsViewModel)
                     }
                 }
             }
@@ -61,7 +64,7 @@ class SettingsActivity : ComponentActivity() {
 }
 
 @Composable
-fun SettingsColumn() {
+fun SettingsColumn(viewModel: SettingsViewModel) {
     //val (isDark, toggleTheme) = rememberThemeState()
     val context = LocalContext.current
     var isDark by rememberSaveable { mutableStateOf(false) }
@@ -77,21 +80,22 @@ fun SettingsColumn() {
             text = "Поделиться приложением",
             icon = Icons.Default.Share,
             onClick = {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "http://PlaylistMaker.com")
-                context.startActivity(shareIntent)
+                viewModel.onShare(context)
+            }
+        )
+        SettingsColumnItem(
+            text = "Написать в поддержку",
+            icon = Icons.Default.SupportAgent,
+            onClick = {
+                viewModel.onHelp(context)
             }
         )
         SettingsColumnItem(
             text = "Пользовательское соглашение",
-            icon = Icons.Default.SupportAgent,
-            onClick = {}
-        )
-        SettingsColumnItem(
-            text = "Написать в поддержку",
             icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
-            onClick = {}
+            onClick = {
+                viewModel.onOffer(context)
+            }
         )
     }
 }
@@ -109,7 +113,7 @@ fun PanelHeaderPreview3() {
 @Composable
 fun SettingsColumnView() {
     MyApplicationTheme(darkTheme = false) {
-        SettingsColumn()
+        SettingsColumn(viewModel = SettingsViewModel())
     }
 }
 
