@@ -1,10 +1,6 @@
 package com.example.myapplication.ui.screens
 
 import PanelHeader
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -41,38 +37,27 @@ import com.example.myapplication.ui.theme.YPTextGray
 import com.example.myapplication.R
 
 
-class SearchActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApplicationTheme(
-                darkTheme = false
-            ) {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    topBar = {
-                        PanelHeader(
-                            title = stringResource(id = R.string.title_activity_search),
-                            onClickAction = {onBackPressedDispatcher.onBackPressed()}
-                        )
-                    }
-                ) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                    ) {
-                        PanelSearch()
-                    }
-                }
-            }
+@Composable
+fun SearchScreen(onBackClickAction: () -> Unit) {
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            PanelHeader(
+                title = stringResource(id = R.string.title_activity_search),
+                onClickAction = onBackClickAction
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+            PanelSearch()
         }
     }
 }
-
-
 
 
 @Composable

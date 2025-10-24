@@ -1,10 +1,6 @@
 package com.example.myapplication.ui.screens
 import PanelHeader
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,43 +24,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.viewModel.SettingsViewModel
 
-class SettingsActivity : ComponentActivity() {
-    private val settingsViewModel by viewModels<SettingsViewModel>()
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            //val (isDark, toggleTheme) = rememberThemeState()
-            MyApplicationTheme(
-                darkTheme = false
-            ) {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    topBar = {
-                        PanelHeader(
-                            title = stringResource(id = R.string.title_activity_settings),
-                            onClickAction = {onBackPressedDispatcher.onBackPressed()}
-                        )
-                    }
-                ) { innerPadding ->
-                    Column (
-                        modifier = Modifier
-                            .padding(innerPadding),
-                    ) {
-                        SettingsColumn(viewModel = settingsViewModel)
-                    }
-                }
-            }
+@Composable
+fun SettingsScreen(onBackClickAction: () -> Unit) {
+    val settingsViewModel = viewModel<SettingsViewModel>()
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            PanelHeader(
+                title = stringResource(id = R.string.title_activity_settings),
+                onClickAction = onBackClickAction
+            )
+        }
+    ) { innerPadding ->
+        Column (
+            modifier = Modifier
+                .padding(innerPadding),
+        ) {
+            SettingsColumn(viewModel = settingsViewModel)
         }
     }
 }
+
 
 @Composable
 fun SettingsColumn(viewModel: SettingsViewModel) {
@@ -127,14 +113,6 @@ fun PanelHeaderPreview3() {
     PanelHeader(title = "label",
         onClickAction = {}
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SettingsColumnView() {
-    MyApplicationTheme(darkTheme = false) {
-        SettingsColumn(viewModel = SettingsViewModel())
-    }
 }
 
 @Preview(showBackground = true)
