@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens
+package com.example.myapplication.ui.search
 
 import PanelHeader
 import androidx.compose.foundation.background
@@ -21,7 +21,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -120,7 +120,7 @@ fun PanelSearch() {
 @Preview(showBackground = true)
 @Composable
 fun PanelSeachPreview() {
-    MyApplicationTheme(darkTheme = false) {
+    PlaylistmakerandroidTheme(darkTheme = false) {
         PanelSearch()
     }
 }

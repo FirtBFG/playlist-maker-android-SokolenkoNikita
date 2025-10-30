@@ -4,7 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.myapplication.ui.navigation.PlaylistHost
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 
 // import com.example.myapplication.ui.theme.rememberThemeState
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             //val (isDark, toggleTheme) = rememberThemeState()
-            MyApplicationTheme(
+            PlaylistmakerandroidTheme(
                 darkTheme = false
             ) {
                 PlaylistHost()

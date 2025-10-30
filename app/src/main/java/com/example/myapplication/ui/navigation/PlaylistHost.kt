@@ -1,13 +1,12 @@
 package com.example.myapplication.ui.navigation
 
-import android.R.attr.name
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.ui.screens.MainScreen
-import com.example.myapplication.ui.screens.SearchScreen
-import com.example.myapplication.ui.screens.SettingsScreen
+import com.example.myapplication.ui.main.MainScreen
+import com.example.myapplication.ui.search.SearchScreen
+import com.example.myapplication.ui.settings.SettingsScreen
 
 @Composable
 fun PlaylistHost(

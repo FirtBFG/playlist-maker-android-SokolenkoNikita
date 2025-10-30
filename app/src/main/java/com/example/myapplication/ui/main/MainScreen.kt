@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens
+package com.example.myapplication.ui.main
 
 import PanelHeader
 import android.widget.Toast
@@ -22,13 +22,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
 import com.example.myapplication.ui.components.MainPanelHeader
 import com.example.myapplication.ui.components.MenuColumnItem
-import com.example.myapplication.ui.navigation.ScreenEnum
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 
 @Composable
 fun MainScreen(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit) {
@@ -105,7 +102,7 @@ fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit)
 @Preview(showBackground = true, backgroundColor = 0xFF3771E5)
 @Composable
 fun PanelHeaderPreview() {
-    MyApplicationTheme(darkTheme = false) {
+    PlaylistmakerandroidTheme(darkTheme = false) {
         MainPanelHeader(stringResource(R.string.app_name))
     }
 }
@@ -113,7 +110,7 @@ fun PanelHeaderPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun PanelHeaderPreview2() {
-    MyApplicationTheme(darkTheme = false) {
+    PlaylistmakerandroidTheme(darkTheme = false) {
         PanelHeader(stringResource(R.string.app_name), onClickAction = {})
     }
 }
@@ -121,7 +118,7 @@ fun PanelHeaderPreview2() {
 @Preview(showBackground = true, backgroundColor = 0xFF3771E5)
 @Composable
 fun MainMenuPreview() {
-    MyApplicationTheme(darkTheme = false) {
+    PlaylistmakerandroidTheme(darkTheme = false) {
         MainMenu({},{})
     }
 }
