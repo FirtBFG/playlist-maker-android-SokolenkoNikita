@@ -14,8 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.ui.components.SettingsColumnItem
-import com.example.myapplication.ui.components.ToggleThemeColumnItem
+import com.example.myapplication.ui.settings.components.SettingsColumnItem
+import com.example.myapplication.ui.settings.components.ToggleThemeColumnItem
 import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 //import com.example.myapplication.ui.theme.rememberThemeState
 import androidx.compose.runtime.getValue
@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.presentation.viewModel.SettingsViewModel
+import com.example.myapplication.ui.settings.viewModel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(onBackClickAction: () -> Unit) {
@@ -53,7 +53,6 @@ fun SettingsScreen(onBackClickAction: () -> Unit) {
 
 @Composable
 fun SettingsColumn(viewModel: SettingsViewModel) {
-    //val (isDark, toggleTheme) = rememberThemeState()
     val context = LocalContext.current
     val shareAppText = stringResource(id = R.string.share_app)
     val typeSupportText = stringResource(id = R.string.type_support)

@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.viewModel
+package com.example.myapplication.ui.settings.viewModel
 
 import android.content.Context
 import android.content.Intent

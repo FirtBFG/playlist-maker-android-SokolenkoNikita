@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.search
+package com.example.myapplication.ui.search.screen
 
 import PanelHeader
 import androidx.compose.foundation.background

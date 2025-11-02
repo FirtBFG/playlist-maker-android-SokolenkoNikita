@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.main.MainScreen
-import com.example.myapplication.ui.search.SearchScreen
+import com.example.myapplication.ui.search.screen.SearchScreen
 import com.example.myapplication.ui.settings.SettingsScreen
 
 @Composable
