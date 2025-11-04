@@ -6,11 +6,6 @@ import com.example.myapplication.domain.api.TrackRepository
 
 object Creator {
     fun getTracksRepository(): TrackRepository {
-        val storage = Storage()
-        return TrackRepositoryImpl(RetrofitNetworkClient(storage = storage))
+        return TrackRepositoryImpl(RetrofitNetworkClient(Storage()))
     }
-
-//    fun provideTrackSearchInteractor(): TrackSearchInteractor {
-//        return TrackSearchInteractorImpl(getTracksRepository())
-//    }
 }

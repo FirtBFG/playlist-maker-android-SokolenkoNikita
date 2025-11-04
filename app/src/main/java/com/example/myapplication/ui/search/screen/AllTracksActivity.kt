@@ -16,22 +16,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.search.screen.ui.theme.PlaylistmakerandroidTheme
 import com.example.myapplication.ui.search.viewModel.SearchViewModel
 
-class AllTracksActivity : ComponentActivity() {
-    private val viewModel by viewModels<SearchViewModel> {
-        SearchViewModel.getViewModelFactory()
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PlaylistmakerandroidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AllTracksScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        viewModel = viewModel
-                    )
-                }
-            }
-        }
-    }
-}
+//class AllTracksActivity : ComponentActivity() {
+//    private val viewModel by viewModels<SearchViewModel> {
+//        SearchViewModel.getViewModelFactory()
+//    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        enableEdgeToEdge()
+//        setContent {
+//            PlaylistmakerandroidTheme {
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                    AllTracksScreen(
+//                        modifier = Modifier.padding(innerPadding),
+//                        viewModel = viewModel
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
