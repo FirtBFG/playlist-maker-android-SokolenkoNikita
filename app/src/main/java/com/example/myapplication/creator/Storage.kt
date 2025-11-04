@@ -60,7 +60,10 @@ class Storage {
         val result = listTracks.filter {
             it.trackName
                 .lowercase()
-                .contains(request.lowercase())
+                .contains(request.lowercase()) ||
+                    it.artistName
+                        .lowercase()
+                        .contains(request.lowercase())
         }
         return result
     }
