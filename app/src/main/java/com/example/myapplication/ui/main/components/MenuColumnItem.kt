@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.components
+package com.example.myapplication.ui.main.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,8 +22,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MenuColumnItem(icon: ImageVector, text: String, onClick: () -> Unit) {
-    Box(
-    ) {
+    Box {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

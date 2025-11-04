@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.components
+package com.example.myapplication.ui.settings.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +21,7 @@ import com.example.myapplication.ui.theme.Blue40
 
 @Composable
 fun ToggleThemeColumnItem(text: String, onCheckedChange: () -> Unit, isDark: Boolean) {
-    Box(
-    ) {
+    Box {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

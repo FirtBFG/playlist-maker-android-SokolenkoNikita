@@ -1,6 +1,5 @@
-package com.example.myapplication.ui.screens
-import PanelHeader
-import android.service.autofill.OnClickAction
+package com.example.myapplication.ui.settings
+import com.example.myapplication.ui.components.PanelHeader
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,10 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.ui.components.SettingsColumnItem
-import com.example.myapplication.ui.components.ToggleThemeColumnItem
-import com.example.myapplication.ui.theme.MyApplicationTheme
-//import com.example.myapplication.ui.theme.rememberThemeState
+import com.example.myapplication.ui.settings.components.SettingsColumnItem
+import com.example.myapplication.ui.settings.components.ToggleThemeColumnItem
+import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
-import com.example.myapplication.ui.viewModel.SettingsViewModel
+import com.example.myapplication.ui.settings.viewModel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(onBackClickAction: () -> Unit) {
@@ -46,7 +44,7 @@ fun SettingsScreen(onBackClickAction: () -> Unit) {
             modifier = Modifier
                 .padding(innerPadding),
         ) {
-            SettingsColumn(viewModel = settingsViewModel)
+           SettingsColumn(viewModel = settingsViewModel)
         }
     }
 }
@@ -54,7 +52,6 @@ fun SettingsScreen(onBackClickAction: () -> Unit) {
 
 @Composable
 fun SettingsColumn(viewModel: SettingsViewModel) {
-    //val (isDark, toggleTheme) = rememberThemeState()
     val context = LocalContext.current
     val shareAppText = stringResource(id = R.string.share_app)
     val typeSupportText = stringResource(id = R.string.type_support)
@@ -124,7 +121,7 @@ fun SettingsColumnItemView() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun ToggleThemeColumnItemView() {
-    MyApplicationTheme(darkTheme = false) {
+    PlaylistmakerandroidTheme(darkTheme = false) {
         ToggleThemeColumnItem(text = "Тёмная тема", isDark = false, onCheckedChange = {})
     }
 }
@@ -132,7 +129,7 @@ fun ToggleThemeColumnItemView() {
 @Preview(showBackground = true, backgroundColor = 0xFF1A1B22)
 @Composable
 fun ToggleThemeColumnItemViewDark() {
-    MyApplicationTheme(darkTheme = true) {
+    PlaylistmakerandroidTheme(darkTheme = true) {
         ToggleThemeColumnItem(text = "Тёмная тема", isDark = true, onCheckedChange = {})
     }
 }

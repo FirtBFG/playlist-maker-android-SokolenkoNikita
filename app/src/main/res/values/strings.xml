@@ -3,6 +3,8 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_search">Поиск</string>
     <string name="search">Поиск</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="saved">Избранное</string>
     <string name="black_theme">Тёмная тема</string>
     <string name="share_app">Поделиться приложением</string>
     <string name="type_support">Написать в поддержку</string>
@@ -12,4 +14,12 @@
     <string name="support_mail_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_mail_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="offer_ref">https://yandex.ru/legal/praktikum_offer/07022019/</string>
+    <string name="title_activity_track">TrackActivity</string>
+    <string name="title_activity_all_tracks">AllTracksActivity</string>
+    <string name="track">Трек</string>
+    <string name="search_screen_initial_text">Введите строку для поиска</string>
+    <string name="no_found">Ничего не нашлось</string>
+    <string name="no_found_desc">No found</string>
+    <string name="no_connection_desc">No Connection</string>
+    <string name="error">Ошибка!</string>
 </resources>
