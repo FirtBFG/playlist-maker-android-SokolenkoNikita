@@ -1,15 +1,20 @@
 package com.example.myapplication.ui.search.screen
 
 import PanelHeader
+import android.R.attr.contentDescription
 import android.R.attr.maxLines
+import android.R.attr.top
 import android.service.autofill.OnClickAction
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,7 +41,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.YPLightGray
@@ -102,13 +110,53 @@ fun SearchScreen(
                         }
                     }
                 }
+                is SearchState.EmptyList -> {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 120.dp)
+                                .padding(top = 102.dp)
+                                .size(120.dp),
+                            painter = painterResource(R.drawable.ic_no_found),
+                            contentDescription = "No found"
+                        )
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Text(
+                            text = "Ничего не нашлось",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 19.sp,
+                        )
+                    }
+                }
                 is SearchState.Error -> {
                     val error = (screenState as SearchState.Error).error
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Ошибка: $error", color = Color.Red)
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 120.dp)
+                                .padding(top = 102.dp)
+                                .size(120.dp),
+                            painter = painterResource(R.drawable.ic_no_connection),
+                            contentDescription = "No Connection"
+                        )
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Text(
+                            text = "Ошибка!",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 19.sp,
+                        )
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Text(
+                            text = error,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 19.sp,
+                        )
                     }
                 }
             }
