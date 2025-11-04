@@ -89,7 +89,7 @@ fun SearchScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Введите строку для поиска")
+                        Text(text = stringResource(id = R.string.search_screen_initial_text),)
                     }
                 }
                 is SearchState.Searching -> {
@@ -121,11 +121,11 @@ fun SearchScreen(
                                 .padding(top = 102.dp)
                                 .size(120.dp),
                             painter = painterResource(R.drawable.ic_no_found),
-                            contentDescription = "No found"
+                            contentDescription = stringResource(id = R.string.no_found_desc)
                         )
                         Spacer(modifier = Modifier.padding(top = 16.dp))
                         Text(
-                            text = "Ничего не нашлось",
+                            text = stringResource(id = R.string.no_found),
                             fontWeight = FontWeight.Bold,
                             fontSize = 19.sp,
                         )
@@ -143,11 +143,11 @@ fun SearchScreen(
                                 .padding(top = 102.dp)
                                 .size(120.dp),
                             painter = painterResource(R.drawable.ic_no_connection),
-                            contentDescription = "No Connection"
+                            contentDescription = stringResource(R.string.no_connection_desc)
                         )
                         Spacer(modifier = Modifier.padding(top = 16.dp))
                         Text(
-                            text = "Ошибка!",
+                            text = stringResource(R.string.error),
                             fontWeight = FontWeight.Bold,
                             fontSize = 19.sp,
                         )

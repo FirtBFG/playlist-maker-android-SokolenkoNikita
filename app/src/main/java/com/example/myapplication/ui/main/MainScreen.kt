@@ -65,12 +65,12 @@ fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit)
         Column {
             MenuColumnItem(
                 icon = Icons.Default.Search,
-                text = stringResource(id = R.string.title_activity_search),
+                text = stringResource(id = R.string.search),
                 onClick = onSearchClickAction
             )
             MenuColumnItem(
                 icon = Icons.Filled.LibraryMusic,
-                text = "Плейлисты",
+                text = stringResource(id = R.string.playlists),
                 onClick = {
                     Toast.makeText(
                         context,
@@ -81,7 +81,7 @@ fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit)
             )
             MenuColumnItem(
                 icon = Icons.Default.FavoriteBorder,
-                text = "Избранное",
+                text = stringResource(id = R.string.saved),
                 onClick = {
                     Toast.makeText(
                         context,

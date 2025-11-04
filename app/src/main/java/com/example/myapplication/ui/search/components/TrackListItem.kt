@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.search.components
 
+import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +39,7 @@ fun TrackListItem(track: Track) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_music),
-            contentDescription = "Трек ${track.trackName}",
+            contentDescription = "${stringResource(id = R.string.track)} ${track.trackName}",
             modifier = Modifier.size(45.dp),
             )
         Column(
