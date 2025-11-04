@@ -1,5 +1,5 @@
 package com.example.myapplication.ui.settings
-import PanelHeader
+import com.example.myapplication.ui.components.PanelHeader
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.ui.settings.components.SettingsColumnItem
 import com.example.myapplication.ui.settings.components.ToggleThemeColumnItem
 import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
-//import com.example.myapplication.ui.theme.rememberThemeState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext

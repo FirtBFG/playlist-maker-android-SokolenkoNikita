@@ -3,7 +3,6 @@ package com.example.myapplication.ui.search.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.creator.Creator
 import com.example.myapplication.domain.api.TrackRepository
 import com.example.myapplication.ui.search.state.SearchState
@@ -24,7 +23,7 @@ class SearchViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _searchScreenState.update { SearchState.Searching }
-                val list = trackRepository.searchTrecks(whatSearch)
+                val list = trackRepository.searchTracks(whatSearch)
                 if (list.isEmpty()) {
                     _searchScreenState.update { SearchState.EmptyList }
                 } else {

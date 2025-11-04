@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 
 class TrackRepositoryImpl (private val networkClient: NetworkClient) : TrackRepository {
-    override suspend fun searchTrecks(expression: String): List<Track> {
+    override suspend fun searchTracks(expression: String): List<Track> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         delay(1000)
         return if(response.resultCode == 200) {

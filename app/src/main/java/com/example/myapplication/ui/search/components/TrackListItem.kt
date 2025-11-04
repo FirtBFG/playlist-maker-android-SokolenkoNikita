@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.search.components
 
-import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

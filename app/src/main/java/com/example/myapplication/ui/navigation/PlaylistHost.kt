@@ -1,7 +1,6 @@
 package com.example.myapplication.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,8 +9,6 @@ import com.example.myapplication.ui.main.MainScreen
 import com.example.myapplication.ui.search.screen.SearchScreen
 import com.example.myapplication.ui.search.viewModel.SearchViewModel
 import com.example.myapplication.ui.settings.SettingsScreen
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 
 @Composable
 fun PlaylistHost(

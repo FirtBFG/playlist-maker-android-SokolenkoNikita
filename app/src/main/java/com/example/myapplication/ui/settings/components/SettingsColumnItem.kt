@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SettingsColumnItem(icon: ImageVector, text: String, onClick: () -> Unit) {
-    Box(
-    ) {
+    Box {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

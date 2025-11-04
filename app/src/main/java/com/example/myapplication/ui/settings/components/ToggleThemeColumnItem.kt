@@ -21,8 +21,7 @@ import com.example.myapplication.ui.theme.Blue40
 
 @Composable
 fun ToggleThemeColumnItem(text: String, onCheckedChange: () -> Unit, isDark: Boolean) {
-    Box(
-    ) {
+    Box {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
