@@ -25,6 +25,7 @@ fun MainScreen(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Uni
             MainPanelHeader(
                 title = stringResource(id = R.string.app_name)
             )
+            // PlaylistScreen()
         },
     ) { innerPadding ->
         Column (
