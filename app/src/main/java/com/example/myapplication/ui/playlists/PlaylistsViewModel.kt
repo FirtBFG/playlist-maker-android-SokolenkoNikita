@@ -55,5 +55,9 @@ class PlaylistsViewModel() : ViewModel() {
     suspend fun isExist(track: Track): Track? {
         return tracksRepository.getTrackByNameAndArtist(track = track).firstOrNull()
     }
+
+    fun getTrackFromDb(track: Track): Flow<Track?> {
+        return tracksRepository.getTrackByNameAndArtist(track)
+    }
 }
 
