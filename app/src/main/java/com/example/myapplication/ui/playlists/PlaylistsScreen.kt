@@ -66,7 +66,6 @@ fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
                     .background(Color(0xFFEAEAEA))
             ) {
                 if (playlist.coverImageUri != null) {
-                    // Показываем обложку плейлиста
                     AsyncImage(
                         model = Uri.parse(playlist.coverImageUri),
                         contentDescription = playlist.name,
@@ -74,7 +73,6 @@ fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
                         contentScale = ContentScale.Crop
                     )
                 } else {
-                    // Показываем обложку первого трека или плейсхолдер
                     val coverUrl = if (playlist.tracks.isNotEmpty()) playlist.tracks.first().artworkUrl100 else null
                     if (!coverUrl.isNullOrBlank()) {
                         AsyncImage(

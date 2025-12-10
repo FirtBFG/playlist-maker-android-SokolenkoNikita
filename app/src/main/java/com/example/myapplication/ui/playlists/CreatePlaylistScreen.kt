@@ -39,11 +39,9 @@ fun CreatePlaylistScreen(
     var name by remember { mutableStateOf("") }
     var desc by remember { mutableStateOf("") }
     
-    // Подписка на состояние обложки из ViewModel
     val coverImageUri by viewModel.coverImageUri.collectAsState()
     val context = LocalContext.current
     
-    // Launcher для выбора изображения
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -52,7 +50,6 @@ fun CreatePlaylistScreen(
         }
     }
     
-    // Launcher для запроса разрешения (только для старых версий Android)
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -122,11 +119,9 @@ fun CreatePlaylistScreen(
                     modifier = Modifier
                         .size(205.dp)
                         .clickable {
-                            // Для Android 13+ (API 33+) разрешения не нужны для выбора изображений
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 imagePickerLauncher.launch("image/*")
                             } else {
-                                // Для старых версий Android проверяем разрешение
                                 when {
                                     ContextCompat.checkSelfPermission(
                                         context,
@@ -142,7 +137,6 @@ fun CreatePlaylistScreen(
                         }
                 ) {
                     if (coverImageUri != null) {
-                        // Показываем выбранное изображение
                         AsyncImage(
                             model = Uri.parse(coverImageUri),
                             contentDescription = stringResource(R.string.playlist_cover),
@@ -150,7 +144,6 @@ fun CreatePlaylistScreen(
                             contentScale = ContentScale.Crop
                         )
                     } else {
-                        // Показываем плейсхолдер
                         Image(
                             painter = painterResource(id = R.drawable.ic_music),
                             contentDescription = stringResource(R.string.add_cover),

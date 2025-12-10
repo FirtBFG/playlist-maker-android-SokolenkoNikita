@@ -20,13 +20,10 @@ class PlaylistsViewModel() : ViewModel() {
     private val playlistsRepository: PlaylistsRepository = PlaylistsRepositoryImpl(scope = viewModelScope)
     private val tracksRepository: TracksRepository = TracksRepositoryImpl(scope = viewModelScope)
     
-    // Приватное изменяемое состояние для обложки
     private var _coverImageUri = MutableStateFlow<String?>(null)
     
-    // Публичное неизменяемое состояние для UI
     val coverImageUri = _coverImageUri.asStateFlow()
     
-    // Функция для установки URI обложки
     fun setCoverImageUri(uri: String?) {
         _coverImageUri.value = uri
     }
@@ -49,7 +46,7 @@ class PlaylistsViewModel() : ViewModel() {
                 description = description,
                 coverImageUri = _coverImageUri.value
             )
-            _coverImageUri.value = null // Сбрасываем после создания
+            _coverImageUri.value = null
         }
     }
 

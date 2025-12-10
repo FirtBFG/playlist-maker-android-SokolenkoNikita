@@ -63,7 +63,6 @@ fun PlaylistScreen(
     val cornerRadius = 16.dp
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFEBEBEB))) {
-        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +97,7 @@ fun PlaylistScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = headerHeight) // Отступ под шапку
+                .padding(top = headerHeight)
         ) {
             if (playlist != null) {
                 val currentPlaylist = playlist!!
@@ -112,14 +111,12 @@ fun PlaylistScreen(
                         Column(
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
                         ) {
-                            // Обложка
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(1f)
                             ) {
                                 if (currentPlaylist.coverImageUri != null) {
-                                    // Показываем выбранное изображение
                                     AsyncImage(
                                         model = Uri.parse(currentPlaylist.coverImageUri),
                                         contentDescription = stringResource(R.string.playlist_cover),
@@ -129,7 +126,6 @@ fun PlaylistScreen(
                                         contentScale = ContentScale.Crop
                                     )
                                 } else {
-                                    // Показываем плейсхолдер или обложку первого трека
                                     val coverUrl = if (currentPlaylist.tracks.isNotEmpty()) currentPlaylist.tracks.first().artworkUrl100 else null
                                     if (!coverUrl.isNullOrBlank()) {
                                         AsyncImage(
@@ -177,7 +173,6 @@ fun PlaylistScreen(
                             
                             val creationYear = currentPlaylist.creationYear ?: Calendar.getInstance().get(Calendar.YEAR)
 
-                            // Статистика
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -213,7 +208,6 @@ fun PlaylistScreen(
                         }
                     }
 
-                    // Список треков
                     items(currentPlaylist.tracks) { track ->
                         TrackListItem(
                             track = track,
