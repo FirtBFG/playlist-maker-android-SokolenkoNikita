@@ -56,7 +56,10 @@ fun SearchScreen(
             PanelSearch(
                 searchText,
                 onValueChange = { value -> searchText = value },
-                onTrailingIconClickAction = { searchText = "" },
+                onTrailingIconClickAction = {
+                    searchText = ""
+                    viewModel.clearState()
+                },
                 onLendingIconClickAction = { viewModel.search(searchText) },
                 onSearch = { viewModel.search(searchText) }
             )
@@ -81,7 +84,10 @@ fun SearchScreen(
                 }
                 is SearchState.Error -> {
                     val error = (screenState as SearchState.Error).error
-                    ErrorSearchBox(error)
+                    ErrorSearchBox(
+                        error = error,
+                        onRetry = { viewModel.retryLastFailed() }
+                    )
                 }
             }
         }

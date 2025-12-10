@@ -24,4 +24,5 @@
     <string name="error">Ошибка!</string>
     <string name="search_icon">Search Icon</string>
     <string name="add_playlist">Add Playlist</string>
+    <string name="refresh">Обновить</string>
 </resources>

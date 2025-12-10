@@ -20,6 +20,11 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import com.google.gson.Gson
 
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.myapplication.ui.playlists.PlaylistScreen
+import com.example.myapplication.ui.playlists.PlaylistViewModel
+
 @Composable
 fun PlaylistHost(
     startDestination: String = ScreenEnum.MainScreen.name,
@@ -70,7 +75,7 @@ fun PlaylistHost(
                 playlistsViewModel = playlistsViewModel,
                 addNewPlaylist = { navController.navigate(ScreenEnum.CreatePlaylistScreen.name) },
                 navigateBack = { navController.popBackStack() },
-                navigateToPlaylist = { /* Пока не реализован экран деталей плейлиста, просто заглушка */ }
+                navigateToPlaylist = { id -> navController.navigate("${ScreenEnum.PlaylistDetailsScreen.name}/$id") }
             )
         }
         composable(
@@ -105,6 +110,24 @@ fun PlaylistHost(
                 track = track,
                 viewModel = playlistsViewModel,
                 onBackClick = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = "${ScreenEnum.PlaylistDetailsScreen.name}/{playlistId}",
+            arguments = listOf(navArgument("playlistId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getLong("playlistId") ?: 0L
+            val viewModel: PlaylistViewModel = viewModel(
+                factory = PlaylistViewModel.getViewModelFactory(playlistId)
+            )
+            PlaylistScreen(
+                playlistViewModel = viewModel,
+                onBackClick = { navController.popBackStack() },
+                onTrackClick = { track ->
+                    val json = gson.toJson(track)
+                    val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
+                    navController.navigate("${ScreenEnum.TrackDetailsScreen.name}/$encodedJson")
+                }
             )
         }
     }

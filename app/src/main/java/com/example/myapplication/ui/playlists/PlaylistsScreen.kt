@@ -1,63 +1,124 @@
 package com.example.myapplication.ui.playlists
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Playlist
+
+private fun getTracksDeclension(count: Int): String {
+    val lastDigit = count % 10
+    val lastTwoDigits = count % 100
+    
+    return when {
+        lastTwoDigits in 11..14 -> "$count треков"
+        lastDigit == 1 -> "$count трек"
+        lastDigit in 2..4 -> "$count трека"
+        else -> "$count треков"
+    }
+}
 
 @Composable
 fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick.invoke() })
-            .padding(8.dp),
+            .height(61.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(id = R.drawable.ic_music),
-            contentDescription = playlist.name,
-            colorFilter = ColorFilter.tint(Color.Gray)
-        )
-        Column(
-            modifier = Modifier.weight(1f).padding(start = 16.dp),
-            horizontalAlignment = Alignment.Start
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(playlist.name, fontSize = 16.sp)
-            val text = "${playlist.tracks.size} tracks"
-            Text(text, fontSize = 11.sp, color = Color.Gray)
+            val coverUrl = if (playlist.tracks.isNotEmpty()) playlist.tracks.first().artworkUrl100 else null
+            
+            if (!coverUrl.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color(0xFFEAEAEA))
+                ) {
+                    AsyncImage(
+                        model = coverUrl,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(R.drawable.ic_music),
+                        error = painterResource(R.drawable.ic_music)
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color(0xFFEAEAEA)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MusicNote,
+                        contentDescription = null,
+                        tint = Color(0xFFB5B5B6),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+            Spacer(Modifier.width(10.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = playlist.name,
+                    fontSize = 16.sp,
+                    color = Color(0xFF111827),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = getTracksDeclension(playlist.tracks.size),
+                    fontSize = 11.sp,
+                    color = Color(0xFFB0B1B5),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
+        Icon(
+            imageVector = Icons.Outlined.ChevronRight,
+            contentDescription = null,
+            tint = Color(0xFFB5B5B6),
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 
@@ -69,49 +130,67 @@ fun PlaylistsScreen(
     navigateToPlaylist: (Long) -> Unit,
     navigateBack: () -> Unit
 ) {
-    val playlists by playlistsViewModel.playlists.collectAsState(emptyList())
+    val headerHeight = 80.dp
+    val cornerRadius = 16.dp
+    val playlists by playlistsViewModel.playlists.collectAsState(initial = emptyList())
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .height(headerHeight + cornerRadius)
+                .background(color = Color.White)
+                .padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray.copy(alpha = 0.7f)),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Назад",
+                    tint = Color.Black,
                     modifier = Modifier
-                        .size(32.dp)
-                        .clickable { navigateBack() },
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.search_icon)
+                        .size(24.dp)
+                        .clickable(onClick = navigateBack)
                 )
-                Text("Playlists", fontSize = 32.sp)
+                Spacer(modifier = Modifier.width(28.dp))
+                Text(
+                    text = "Плейлисты",
+                    color = Color.Black,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.W500
+                )
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, start = 8.dp, end = 8.dp),
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = headerHeight + 3.dp)
+                .background(Color.White)
+        ) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp)
             ) {
-                LazyColumn(modifier = modifier.fillMaxSize()) {
-                    items(playlists.size) { index ->
-                        PlaylistListItem(playlist = playlists[index]) {
-                            navigateToPlaylist(playlists[index].id)
-                        }
-                        HorizontalDivider(thickness = 0.5.dp)
+                items(playlists) { playlist ->
+                    PlaylistListItem(playlist = playlist) {
+                        navigateToPlaylist(playlist.id)
                     }
                 }
             }
         }
+
         FloatingActionButton(
             modifier = Modifier
                 .padding(32.dp)
                 .align(Alignment.BottomEnd),
-            onClick = { addNewPlaylist() },
+            onClick = addNewPlaylist,
             containerColor = Color.Gray,
             contentColor = Color.White,
             shape = CircleShape

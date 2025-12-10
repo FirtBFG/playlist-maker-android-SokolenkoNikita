@@ -2,7 +2,6 @@ package com.example.myapplication.ui.playlists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.data.db.DatabaseMock
 import com.example.myapplication.data.repository.PlaylistsRepositoryImpl
 import com.example.myapplication.data.repository.TracksRepositoryImpl
 import com.example.myapplication.domain.api.PlaylistsRepository
@@ -18,18 +17,17 @@ import kotlinx.coroutines.launch
 class PlaylistsViewModel() : ViewModel() {
     private val playlistsRepository: PlaylistsRepository = PlaylistsRepositoryImpl(scope = viewModelScope)
     private val tracksRepository: TracksRepository = TracksRepositoryImpl(scope = viewModelScope)
-    // Используем мок базы вместо репозитория (как в задании) - хотя это странно, но делаем как в примере
-    private val databaseRepository: DatabaseMock = DatabaseMock(scope = viewModelScope)
 
     val playlists: Flow<List<Playlist>> = flow {
         val collectedPlaylists = mutableListOf<Playlist>()
         playlistsRepository.getAllPlaylists().collect { playlist ->
+            collectedPlaylists.clear()
             collectedPlaylists.addAll(playlist)
             emit(collectedPlaylists.toList())
         }
     }
 
-    val favoriteList: Flow<List<Track>> = databaseRepository.getFavoriteTracks()
+    val favoriteList: Flow<List<Track>> = tracksRepository.getFavoriteTracks()
 
     fun createNewPlayList(namePlaylist: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
