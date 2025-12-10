@@ -149,7 +149,7 @@ fun TrackDetailsScreen(
                     Icon(
                         imageVector = Icons.Filled.PlaylistAdd,
                         contentDescription = "Добавить в плейлист",
-                        tint = Color(0xFF1A1B22),
+                        tint = Color(0xFF9CA3AF),
                         modifier = Modifier.size(28.dp)
                     )
                 }
