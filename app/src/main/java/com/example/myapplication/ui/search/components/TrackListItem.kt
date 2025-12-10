@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.search.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,13 +27,14 @@ import com.example.myapplication.R
 
 
 @Composable
-fun TrackListItem(track: Track) {
+fun TrackListItem(track: Track, onTrackClick: (Track) -> Unit) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
-            .padding(start = 13.dp, end = 12.dp),
+            .padding(start = 13.dp, end = 12.dp)
+            .clickable { onTrackClick(track) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -84,5 +86,5 @@ fun TrackListItemPreview() {
         trackName = "Aboba",
         artistName = "DJ Donbass",
         trackTime = "4:20"
-    ))
+    ), {})
 }

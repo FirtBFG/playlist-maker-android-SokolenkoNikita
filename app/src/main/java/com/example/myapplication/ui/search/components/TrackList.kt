@@ -7,12 +7,15 @@ import androidx.compose.ui.Modifier
 import com.example.myapplication.domain.models.Track
 
 @Composable
-fun TrackList(tracks: List<Track>) {
+fun TrackList(
+    tracks: List<Track>,
+    onTrackClick: (Track) -> Unit = {}
+) {
     LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
         items(tracks.size) { index ->
-            TrackListItem(track = tracks[index])
+            TrackListItem(track = tracks[index], onTrackClick = onTrackClick)
         }
     }
 }

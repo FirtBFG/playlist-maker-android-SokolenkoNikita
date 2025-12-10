@@ -16,7 +16,12 @@ import com.example.myapplication.ui.main.components.MainPanelHeader
 import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 
 @Composable
-fun MainScreen(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit) {
+fun MainScreen(
+    onSettingsClickAction: () -> Unit,
+    onSearchClickAction: () -> Unit,
+    onPlaylistsClickAction: () -> Unit,
+    onFavoritesClickAction: () -> Unit
+) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -25,7 +30,6 @@ fun MainScreen(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Uni
             MainPanelHeader(
                 title = stringResource(id = R.string.app_name)
             )
-            // PlaylistScreen()
         },
     ) { innerPadding ->
         Column (
@@ -33,34 +37,10 @@ fun MainScreen(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Uni
         ) {
             MainMenu(
                 onSearchClickAction = onSearchClickAction,
-                onSettingsClickAction = onSettingsClickAction
+                onSettingsClickAction = onSettingsClickAction,
+                onPlaylistsClickAction = onPlaylistsClickAction,
+                onFavoritesClickAction = onFavoritesClickAction
             )
         }
-    }
-}
-
-
-
-@Preview(showBackground = true, backgroundColor = 0xFF3771E5)
-@Composable
-fun PanelHeaderPreview() {
-    PlaylistmakerandroidTheme(darkTheme = false) {
-        MainPanelHeader(stringResource(R.string.app_name))
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun PanelHeaderPreview2() {
-    PlaylistmakerandroidTheme(darkTheme = false) {
-        PanelHeader(stringResource(R.string.app_name), onClickAction = {})
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF3771E5)
-@Composable
-fun MainMenuPreview() {
-    PlaylistmakerandroidTheme(darkTheme = false) {
-        MainMenu({},{})
     }
 }

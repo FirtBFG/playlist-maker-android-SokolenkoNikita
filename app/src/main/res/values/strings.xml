@@ -22,4 +22,6 @@
     <string name="no_found_desc">No found</string>
     <string name="no_connection_desc">No Connection</string>
     <string name="error">Ошибка!</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="add_playlist">Add Playlist</string>
 </resources>

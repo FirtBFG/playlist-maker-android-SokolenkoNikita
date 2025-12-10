@@ -17,6 +17,7 @@ class TrackRepositoryImpl (private val networkClient: NetworkClient) : TrackRepo
                 val seconds = it.trackTimeMillis / 1000
                 val minutes = seconds / 60
                 Track(
+                    id = System.currentTimeMillis(), // Fake ID
                     artistName = it.artistName,
                     trackName = it.trackName,
                     trackTime = "%02d".format(minutes) + "%02d".format(seconds - minutes*60)

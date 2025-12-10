@@ -1,120 +1,125 @@
 package com.example.myapplication.ui.playlists
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
+import com.example.myapplication.domain.models.Playlist
 
 @Composable
-fun PlaylistScreen(modifier: Modifier = Modifier) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    Scaffold(modifier = modifier.fillMaxSize(), containerColor = Color.White) { innerPadding ->
-        MyFloatingActionButton(
-            modifier =modifier.padding(innerPadding)
-        ) {
-            showBottomSheet = true
-        }
-        ModalSheet(
-            modifier = modifier.padding(innerPadding),
-            isShowPanel = showBottomSheet,
-            content = "bottom sheet",
-            onDismissRequest = {showBottomSheet = false}
+fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick.invoke() })
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = R.drawable.ic_music),
+            contentDescription = playlist.name,
+            colorFilter = ColorFilter.tint(Color.Gray)
         )
+        Column(
+            modifier = Modifier.weight(1f).padding(start = 16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(playlist.name, fontSize = 16.sp)
+            val text = "${playlist.tracks.size} tracks"
+            Text(text, fontSize = 11.sp, color = Color.Gray)
+        }
     }
 }
 
 @Composable
-fun MyFloatingActionButton(
-    modifier: Modifier,
-    callback: () -> Unit
+fun PlaylistsScreen(
+    modifier: Modifier = Modifier,
+    playlistsViewModel: PlaylistsViewModel,
+    addNewPlaylist: () -> Unit,
+    navigateToPlaylist: (Long) -> Unit,
+    navigateBack: () -> Unit
 ) {
+    val playlists by playlistsViewModel.playlists.collectAsState(emptyList())
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray.copy(alpha = 0.7f)),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable { navigateBack() },
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.search_icon)
+                )
+                Text("Playlists", fontSize = 32.sp)
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, start = 8.dp, end = 8.dp),
+            ) {
+                LazyColumn(modifier = modifier.fillMaxSize()) {
+                    items(playlists.size) { index ->
+                        PlaylistListItem(playlist = playlists[index]) {
+                            navigateToPlaylist(playlists[index].id)
+                        }
+                        HorizontalDivider(thickness = 0.5.dp)
+                    }
+                }
+            }
+        }
         FloatingActionButton(
             modifier = Modifier
                 .padding(32.dp)
                 .align(Alignment.BottomEnd),
-            onClick = callback,
-            containerColor = Color.LightGray,
+            onClick = { addNewPlaylist() },
+            containerColor = Color.Gray,
             contentColor = Color.White,
             shape = CircleShape
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
-                contentDescription = "Floating Action Button",
-                modifier = Modifier.size(51.dp)
+                contentDescription = stringResource(R.string.add_playlist)
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ModalSheet(
-    modifier: Modifier,
-    isShowPanel: Boolean,
-    onDismissRequest: () -> Unit,
-    content: String
-) {
-    val sheetState = rememberModalBottomSheetState()
-
-    if(isShowPanel) {
-        ModalBottomSheet(
-            onDismissRequest = onDismissRequest,
-            sheetState = sheetState
-        ) {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = content,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .padding(top = 16.dp),
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Icon"
-                )
-            }
-        }
-    }
-
-}
-
-@Preview
-@Composable
-fun ScreenPreview() {
-    PlaylistScreen()
 }
