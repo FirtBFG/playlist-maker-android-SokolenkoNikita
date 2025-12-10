@@ -6,6 +6,6 @@ import com.example.myapplication.domain.api.TrackRepository
 
 object Creator {
     fun getTracksRepository(): TrackRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient(Storage()))
+        return TrackRepositoryImpl(RetrofitNetworkClient())
     }
 }

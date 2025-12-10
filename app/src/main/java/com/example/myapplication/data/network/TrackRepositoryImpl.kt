@@ -5,22 +5,26 @@ import com.example.myapplication.data.dto.TracksSearchRequest
 import com.example.myapplication.data.dto.TracksSearchResponse
 import com.example.myapplication.domain.api.TrackRepository
 import com.example.myapplication.domain.models.Track
-import kotlinx.coroutines.delay
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackRepositoryImpl (private val networkClient: NetworkClient) : TrackRepository {
     override suspend fun searchTracks(expression: String): List<Track> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        delay(1000)
+        // delay(1000) // Задержка не нужна для реального запроса
         return if(response.resultCode == 200) {
             (response as TracksSearchResponse).results.map {
-                val seconds = it.trackTimeMillis / 1000
-                val minutes = seconds / 60
                 Track(
-                    id = System.currentTimeMillis(), // Fake ID
+                    id = it.trackId ?: System.currentTimeMillis(),
                     artistName = it.artistName,
                     trackName = it.trackName,
-                    trackTime = "%02d".format(minutes) + "%02d".format(seconds - minutes*60)
+                    trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(it.trackTimeMillis),
+                    artworkUrl100 = it.artworkUrl100 ?: "",
+                    collectionName = it.collectionName ?: "",
+                    releaseDate = it.releaseDate ?: "",
+                    primaryGenreName = it.primaryGenreName ?: "",
+                    country = it.country ?: "",
+                    previewUrl = it.previewUrl ?: ""
                 )
             }
         } else {
