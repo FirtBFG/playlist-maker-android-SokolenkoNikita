@@ -57,30 +57,10 @@ class Storage {
     )
 
     fun search(request: String): List<TrackDto> {
-        val normalizedRequest = request.normalize()
-        val result = listTracks.filter {
-            it.trackName.normalize().contains(normalizedRequest) ||
-                    it.artistName.normalize().contains(normalizedRequest)
+        val normalizedRequest = request.lowercase()
+        return listTracks.filter {
+            it.trackName.lowercase().contains(normalizedRequest) ||
+                    it.artistName.lowercase().contains(normalizedRequest)
         }
-        return result
-    }
-
-    private fun String.normalize(): String {
-        val map = mapOf(
-            'a' to 'а',
-            'e' to 'е',
-            'o' to 'о',
-            'p' to 'р',
-            'c' to 'с',
-            'x' to 'х',
-            'y' to 'у',
-            'k' to 'к',
-            'b' to 'в',
-            'm' to 'м',
-            't' to 'т',
-            'h' to 'н',
-            'l' to 'л'
-        )
-        return this.lowercase().map { map[it] ?: it }.joinToString("")
     }
 }
