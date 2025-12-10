@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.playlists
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,8 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,20 +113,47 @@ fun PlaylistScreen(
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
                         ) {
                             // Обложка
-                            val coverUrl = if (currentPlaylist.tracks.isNotEmpty()) currentPlaylist.tracks.first().artworkUrl100 else null
-
-                            AsyncImage(
-                                model = coverUrl,
-                                contentDescription = null,
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color.Gray),
-                                contentScale = ContentScale.Crop,
-                                placeholder = painterResource(R.drawable.ic_music),
-                                error = painterResource(R.drawable.ic_music)
-                            )
+                            ) {
+                                if (currentPlaylist.coverImageUri != null) {
+                                    // Показываем выбранное изображение
+                                    AsyncImage(
+                                        model = Uri.parse(currentPlaylist.coverImageUri),
+                                        contentDescription = stringResource(R.string.playlist_cover),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(8.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                } else {
+                                    // Показываем плейсхолдер или обложку первого трека
+                                    val coverUrl = if (currentPlaylist.tracks.isNotEmpty()) currentPlaylist.tracks.first().artworkUrl100 else null
+                                    if (!coverUrl.isNullOrBlank()) {
+                                        AsyncImage(
+                                            model = coverUrl,
+                                            contentDescription = stringResource(R.string.playlist_cover),
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .clip(RoundedCornerShape(8.dp)),
+                                            contentScale = ContentScale.Crop,
+                                            placeholder = painterResource(R.drawable.ic_music),
+                                            error = painterResource(R.drawable.ic_music)
+                                        )
+                                    } else {
+                                        Image(
+                                            painter = painterResource(R.drawable.ic_music),
+                                            contentDescription = stringResource(R.string.add_cover),
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .clip(RoundedCornerShape(8.dp)),
+                                            colorFilter = ColorFilter.tint(Color.Gray)
+                                        )
+                                    }
+                                }
+                            }
 
                             Spacer(modifier = Modifier.height(24.dp))
 
