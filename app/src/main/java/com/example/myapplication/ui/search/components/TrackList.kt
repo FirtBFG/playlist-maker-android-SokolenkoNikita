@@ -15,7 +15,10 @@ fun TrackList(
         modifier = Modifier.fillMaxSize()
     ) {
         items(tracks.size) { index ->
-            TrackListItem(track = tracks[index], onTrackClick = onTrackClick)
+            TrackListItem(
+                track = tracks[index],
+                onClick = { onTrackClick(tracks[index]) }
+            )
         }
     }
 }

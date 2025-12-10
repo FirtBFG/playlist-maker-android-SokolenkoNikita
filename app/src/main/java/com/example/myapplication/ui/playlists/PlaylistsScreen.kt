@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.playlists
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -58,38 +59,38 @@ fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val coverUrl = if (playlist.tracks.isNotEmpty()) playlist.tracks.first().artworkUrl100 else null
-            
-            if (!coverUrl.isNullOrBlank()) {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA))
-                ) {
+            Box(
+                modifier = Modifier
+                    .size(45.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Color(0xFFEAEAEA))
+            ) {
+                if (playlist.coverImageUri != null) {
                     AsyncImage(
-                        model = coverUrl,
-                        contentDescription = null,
+                        model = Uri.parse(playlist.coverImageUri),
+                        contentDescription = playlist.name,
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                        placeholder = painterResource(R.drawable.ic_music),
-                        error = painterResource(R.drawable.ic_music)
+                        contentScale = ContentScale.Crop
                     )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MusicNote,
-                        contentDescription = null,
-                        tint = Color(0xFFB5B5B6),
-                        modifier = Modifier.size(20.dp)
-                    )
+                } else {
+                    val coverUrl = if (playlist.tracks.isNotEmpty()) playlist.tracks.first().artworkUrl100 else null
+                    if (!coverUrl.isNullOrBlank()) {
+                        AsyncImage(
+                            model = coverUrl,
+                            contentDescription = playlist.name,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            placeholder = painterResource(R.drawable.ic_music),
+                            error = painterResource(R.drawable.ic_music)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Filled.MusicNote,
+                            contentDescription = playlist.name,
+                            tint = Color(0xFFB5B5B6),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
             Spacer(Modifier.width(10.dp))

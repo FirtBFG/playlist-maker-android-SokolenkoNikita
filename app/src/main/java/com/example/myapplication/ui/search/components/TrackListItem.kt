@@ -2,6 +2,7 @@ package com.example.myapplication.ui.search.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,14 +32,27 @@ import com.example.myapplication.R
 
 
 @Composable
-fun TrackListItem(track: Track, onTrackClick: (Track) -> Unit) {
+fun TrackListItem(
+    track: Track,
+    onLongClick: (() -> Unit)? = null,
+    onClick: () -> Unit
+) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
             .padding(start = 13.dp, end = 12.dp)
-            .clickable { onTrackClick(track) },
+            .then(
+                if (onLongClick != null) {
+                    Modifier.combinedClickable(
+                        onClick = onClick,
+                        onLongClick = onLongClick
+                    )
+                } else {
+                    Modifier.clickable(onClick = onClick)
+                }
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -93,9 +107,12 @@ fun TrackListItem(track: Track, onTrackClick: (Track) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun TrackListItemPreview() {
-    TrackListItem(Track(
-        trackName = "Aboba",
-        artistName = "DJ Donbass",
-        trackTime = "4:20"
-    ), {})
+    TrackListItem(
+        track = Track(
+            trackName = "Aboba",
+            artistName = "DJ Donbass",
+            trackTime = "4:20"
+        ),
+        onClick = {}
+    )
 }

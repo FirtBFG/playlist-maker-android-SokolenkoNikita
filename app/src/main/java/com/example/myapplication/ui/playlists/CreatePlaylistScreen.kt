@@ -1,5 +1,11 @@
 package com.example.myapplication.ui.playlists
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,10 +18,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
 import com.example.myapplication.R
 
 @Composable
@@ -27,6 +38,25 @@ fun CreatePlaylistScreen(
     val cornerRadius = 16.dp
     var name by remember { mutableStateOf("") }
     var desc by remember { mutableStateOf("") }
+    
+    val coverImageUri by viewModel.coverImageUri.collectAsState()
+    val context = LocalContext.current
+    
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.setCoverImageUri(it.toString())
+        }
+    }
+    
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            imagePickerLauncher.launch("image/*")
+        }
+    }
     
     val isNameFilled = name.isNotBlank()
     val buttonColor = if (isNameFilled) Color(0xFF3772E7) else Color(0xFFAEAFB4)
@@ -77,12 +107,50 @@ fun CreatePlaylistScreen(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(120.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.ic_music),
-                    contentDescription = null,
-                    modifier = Modifier.size(120.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Обложка:",
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .size(205.dp)
+                        .clickable {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                imagePickerLauncher.launch("image/*")
+                            } else {
+                                when {
+                                    ContextCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    ) == PackageManager.PERMISSION_GRANTED -> {
+                                        imagePickerLauncher.launch("image/*")
+                                    }
+                                    else -> {
+                                        permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    }
+                                }
+                            }
+                        }
+                ) {
+                    if (coverImageUri != null) {
+                        AsyncImage(
+                            model = Uri.parse(coverImageUri),
+                            contentDescription = stringResource(R.string.playlist_cover),
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_music),
+                            contentDescription = stringResource(R.string.add_cover),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(32.dp))
                 
                 OutlinedTextField(

@@ -29,6 +29,7 @@ class PlaylistsRepositoryImpl(
                     id = entity.id,
                     name = entity.name,
                     description = entity.description,
+                    coverImageUri = entity.coverImageUri,
                     creationYear = entity.creationYear,
                     tracks = trackEntities.map { it.toTrack() }
                 )
@@ -49,6 +50,7 @@ class PlaylistsRepositoryImpl(
                     id = playlistEntity.id,
                     name = playlistEntity.name,
                     description = playlistEntity.description,
+                    coverImageUri = playlistEntity.coverImageUri,
                     creationYear = playlistEntity.creationYear,
                     tracks = playlistTracks
                 )
@@ -56,12 +58,13 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    override suspend fun addNewPlaylist(name: String, description: String) {
+    override suspend fun addNewPlaylist(name: String, description: String, coverImageUri: String?) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         playlistDao.insertPlaylist(
             PlaylistEntity(
                 name = name,
                 description = description,
+                coverImageUri = coverImageUri,
                 creationYear = currentYear
             )
         )
