@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -84,10 +83,12 @@ fun PlaylistScreen(
                         .clickable(onClick = onBackClick)
                 )
                 Spacer(modifier = Modifier.width(28.dp))
-                // В эталоне заголовок "Плейлист" или имя плейлиста в шапке?
-                // В эталоне: text = playlist?.name ?: "Плейлист"
-                // Но ниже еще раз имя.
-                // Судя по коду эталона, в шапке показывается имя.
+                Text(
+                    text = playlist?.name ?: "Плейлист",
+                    color = Color.Black,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.W500
+                )
             }
         }
 
@@ -144,9 +145,7 @@ fun PlaylistScreen(
                             
                             Spacer(modifier = Modifier.height(8.dp))
                             
-                            val creationYear = Calendar.getInstance().get(Calendar.YEAR) // В модели нет года, берем текущий или заглушку
-                            // В эталоне: val creationYear = currentPlaylist.creationYear ?: Calendar.getInstance().get(Calendar.YEAR)
-                            // У нас нет поля creationYear в Playlist (пока).
+                            val creationYear = currentPlaylist.creationYear ?: Calendar.getInstance().get(Calendar.YEAR)
 
                             // Статистика
                             Row(
@@ -174,12 +173,6 @@ fun PlaylistScreen(
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Share,
-                                    contentDescription = "Share",
-                                    tint = Color.Black,
-                                    modifier = Modifier.size(24.dp)
-                                )
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
                                     contentDescription = "Menu",
