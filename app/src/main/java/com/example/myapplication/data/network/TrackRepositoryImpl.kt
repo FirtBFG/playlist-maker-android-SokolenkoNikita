@@ -7,6 +7,7 @@ import com.example.myapplication.domain.api.TrackRepository
 import com.example.myapplication.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class TrackRepositoryImpl (private val networkClient: NetworkClient) : TrackRepository {
     override suspend fun searchTracks(expression: String): List<Track> {
@@ -18,7 +19,9 @@ class TrackRepositoryImpl (private val networkClient: NetworkClient) : TrackRepo
                     id = it.trackId ?: System.currentTimeMillis(),
                     artistName = it.artistName,
                     trackName = it.trackName,
-                    trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(it.trackTimeMillis),
+                    trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).apply {
+                        timeZone = TimeZone.getTimeZone("GMT")
+                    }.format(it.trackTimeMillis),
                     artworkUrl100 = it.artworkUrl100 ?: "",
                     collectionName = it.collectionName ?: "",
                     releaseDate = it.releaseDate ?: "",

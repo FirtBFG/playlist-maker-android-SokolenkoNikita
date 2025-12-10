@@ -81,7 +81,10 @@ fun SearchScreen(
                 }
                 is SearchState.Error -> {
                     val error = (screenState as SearchState.Error).error
-                    ErrorSearchBox(error)
+                    ErrorSearchBox(
+                        error = error,
+                        onRetry = { viewModel.search(searchText) }
+                    )
                 }
             }
         }
