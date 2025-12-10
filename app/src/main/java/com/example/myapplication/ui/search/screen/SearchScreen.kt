@@ -57,7 +57,8 @@ fun SearchScreen(
                 searchText,
                 onValueChange = { value -> searchText = value },
                 onTrailingIconClickAction = { searchText = "" },
-                onLendingIconClickAction = { viewModel.search(searchText) }
+                onLendingIconClickAction = { viewModel.search(searchText) },
+                onSearch = { viewModel.search(searchText) }
             )
             when (screenState) {
                 is SearchState.Initial -> {
