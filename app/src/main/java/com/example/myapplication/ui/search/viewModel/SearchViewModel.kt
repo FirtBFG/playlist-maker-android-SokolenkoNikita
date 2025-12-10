@@ -18,21 +18,41 @@ class SearchViewModel(
 ) : ViewModel() {
     private val _searchScreenState = MutableStateFlow<SearchState>(SearchState.Initial)
     val searchScreenState = _searchScreenState.asStateFlow()
+    private var lastQuery: String = ""
+    private var lastFailedQuery: String = ""
 
     fun search(whatSearch: String) {
+        if (whatSearch.isBlank()) {
+            _searchScreenState.update { SearchState.Initial }
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _searchScreenState.update { SearchState.Searching }
-                val list = trackRepository.searchTracks(whatSearch)
+                lastQuery = whatSearch
+                val list = trackRepository.searchTracks(whatSearch.trim())
                 if (list.isEmpty()) {
                     _searchScreenState.update { SearchState.EmptyList }
                 } else {
                     _searchScreenState.update { SearchState.Success(list) }
                 }
             } catch (e: IOException) {
+                lastFailedQuery = whatSearch
                 _searchScreenState.update { SearchState.Error(e.message.toString()) }
             }
         }
+    }
+
+    fun retryLastFailed() {
+        if (lastFailedQuery.isNotBlank()) {
+            search(lastFailedQuery)
+        }
+    }
+
+    fun clearState() {
+        _searchScreenState.update { SearchState.Initial }
+        lastQuery = ""
+        lastFailedQuery = ""
     }
 
     companion object {
