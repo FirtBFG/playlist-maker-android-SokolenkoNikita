@@ -1,6 +1,6 @@
 package com.example.myapplication.data.repository
 
-import com.example.myapplication.data.db.DatabaseMock
+import com.example.myapplication.data.db.DbProvider
 import com.example.myapplication.domain.api.PlaylistsRepository
 import com.example.myapplication.domain.models.Playlist
 import kotlinx.coroutines.CoroutineScope
@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistsRepositoryImpl(
     private val scope: CoroutineScope
 ) : PlaylistsRepository {
-    private val database = DatabaseMock(
-        scope = scope,
-    )
+    private val database = DbProvider.database
     override fun getPlaylist(playlistId: Long): Flow<Playlist?> {
         return database.getPlaylist(playlistId)
     }

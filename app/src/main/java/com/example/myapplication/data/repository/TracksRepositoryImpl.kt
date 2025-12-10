@@ -1,6 +1,6 @@
 package com.example.myapplication.data.repository
 
-import com.example.myapplication.data.db.DatabaseMock
+import com.example.myapplication.data.db.DbProvider
 import com.example.myapplication.domain.api.TracksRepository
 import com.example.myapplication.domain.models.Track
 import kotlinx.coroutines.CoroutineScope
@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class TracksRepositoryImpl(
     private val scope: CoroutineScope
 ) : TracksRepository {
-    private val database = DatabaseMock(
-        scope = scope
-    )
+    private val database = DbProvider.database
     override suspend fun searchTracks(expression: String): List<Track> {
         return database.searchTracks(expression)
     }
