@@ -86,7 +86,12 @@ fun PlaylistHost(
         ) {
             FavoritesScreen(
                 viewModel = playlistsViewModel,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onTrackClick = { track ->
+                    val json = gson.toJson(track)
+                    val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
+                    navController.navigate("${ScreenEnum.TrackDetailsScreen.name}/$encodedJson")
+                }
             )
         }
         composable(

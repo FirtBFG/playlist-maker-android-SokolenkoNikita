@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.myapplication.R
+import com.example.myapplication.domain.models.Track
 import com.example.myapplication.ui.components.PanelHeader
 import com.example.myapplication.ui.playlists.PlaylistsViewModel
 import com.example.myapplication.ui.search.components.TrackList
@@ -17,7 +18,8 @@ import com.example.myapplication.ui.search.components.TrackList
 @Composable
 fun FavoritesScreen(
     viewModel: PlaylistsViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onTrackClick: (Track) -> Unit
 ) {
     val favorites by viewModel.favoriteList.collectAsState(initial = emptyList())
 
@@ -34,7 +36,7 @@ fun FavoritesScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            TrackList(tracks = favorites)
+            TrackList(tracks = favorites, onTrackClick = onTrackClick)
         }
     }
 }
