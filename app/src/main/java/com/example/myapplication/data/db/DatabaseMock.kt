@@ -34,36 +34,30 @@ class DatabaseMock(
     }
 
     fun getAllPlaylists(): Flow<List<Playlist>> = flow {
-        delay(500)
-        val filteredPlaylists = mutableListOf<Playlist>()
-        playlists.forEach { playlist ->
-            val playlistTracks = tracks.filter { track ->
-                track.playlistId == playlist.id
-            }
-            filteredPlaylists.add(playlist.copy(tracks = playlistTracks))
-        }
-        emit(filteredPlaylists.toList())
         delay(100)
+        val filteredPlaylists = playlists.map { pl ->
+            val playlistTracks = tracks.filter { track -> track.playlistId == pl.id }
+            pl.copy(tracks = playlistTracks)
+        }
+        emit(filteredPlaylists)
     }
 
     fun getPlaylist(id: Long): Flow<Playlist?> = flow {
         val playlist = playlists.find { it.id == id }
-        if (playlist != null) {
-            val playlistTracks = tracks.filter { track ->
-                track.playlistId == playlist.id
-            }
-            emit(playlist.copy(tracks = playlistTracks))
-        } else {
-            emit(null)
-        }
+        emit(
+            playlist?.copy(
+                tracks = tracks.filter { it.playlistId == id }
+            )
+        )
     }
 
-    fun addNewPlaylist(name: String, description: String) {
+    fun addNewPlaylist(name: String, description: String, creationYear: Int? = null) {
         playlists.add(
             Playlist(
                 id = playlists.size.toLong() + 1,
                 name = name,
                 description = description,
+                creationYear = creationYear,
                 tracks = emptyList()
             )
         )
