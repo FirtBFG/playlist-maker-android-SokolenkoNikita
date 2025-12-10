@@ -1,11 +1,18 @@
 package com.example.myapplication.data.db
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import android.content.Context
+import com.example.myapplication.data.database.AppDatabase
 
 object DbProvider {
-    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    val database: DatabaseMock = DatabaseMock(scope = appScope)
-}
+    private var databaseInstance: AppDatabase? = null
 
+    fun init(context: Context) {
+        if (databaseInstance == null) {
+            databaseInstance = AppDatabase.getDatabase(context)
+        }
+    }
+
+    val database: AppDatabase
+        get() = databaseInstance
+            ?: throw IllegalStateException("DbProvider must be initialized with init(context) first")
+}

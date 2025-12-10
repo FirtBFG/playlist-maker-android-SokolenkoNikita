@@ -1,48 +1,35 @@
 package com.example.myapplication.ui.details
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Track
-import com.example.myapplication.ui.components.PanelHeader
 import com.example.myapplication.ui.playlists.PlaylistsViewModel
 import kotlinx.coroutines.launch
 
@@ -53,122 +40,254 @@ fun TrackDetailsScreen(
     viewModel: PlaylistsViewModel,
     onBackClick: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    var isFavorite by remember { mutableStateOf(track.favorite) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val headerHeight = 56.dp
+    var showSheet by remember { mutableStateOf(false) }
     val playlists by viewModel.playlists.collectAsState(initial = emptyList())
-    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
 
-    // Check if track is in favorite in DB to sync state
-    LaunchedEffect(track) {
-         val existing = viewModel.isExist(track)
-         if (existing != null) {
-             isFavorite = existing.favorite
-         }
+    val trackFlow = remember(track.trackName, track.artistName) {
+        viewModel.getTrackFromDb(track)
     }
+    val trackFromDb by trackFlow.collectAsState(initial = null)
+    val currentTrack = trackFromDb ?: track
+    var isFavorite by remember(currentTrack) { mutableStateOf(currentTrack.favorite) }
 
-    Scaffold(
-        topBar = {
-            PanelHeader(
-                title = "Track Details",
-                onClickAction = onBackClick
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFFAFAFA))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(headerHeight)
+                .background(Color.White)
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Назад",
+                tint = Color(0xFF1A1B22),
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(onClick = onBackClick)
             )
         }
-    ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = headerHeight)
+                .padding(horizontal = 24.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_music),
-                contentDescription = null,
-                modifier = Modifier.size(200.dp)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFE8E8E8))
+            ) {
+                if (track.artworkUrl100.isNotBlank()) {
+                    val artworkUrl = track.artworkUrl100.replace("100x100", "512x512")
+                    AsyncImage(
+                        model = artworkUrl,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(R.drawable.ic_music),
+                        error = painterResource(R.drawable.ic_music)
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.MusicNote,
+                            contentDescription = null,
+                            tint = Color(0xFFB5B5B6),
+                            modifier = Modifier.size(80.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
             Text(
-                text = track.trackName,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                text = currentTrack.trackName,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF1A1B22),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = track.artistName,
-                style = MaterialTheme.typography.titleMedium
+                text = currentTrack.artistName,
+                fontSize = 14.sp,
+                color = Color(0xFF6B7280),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            Text(
-                text = track.trackTime,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally)
             ) {
-                IconButton(onClick = {
-                    isFavorite = !isFavorite
-                    scope.launch {
-                        viewModel.toggleFavorite(track, isFavorite)
-                    }
-                }) {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFF3F4F6))
+                        .clickable { showSheet = true },
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.primary
+                        imageVector = Icons.Filled.PlaylistAdd,
+                        contentDescription = "Добавить в плейлист",
+                        tint = Color(0xFF9CA3AF),
+                        modifier = Modifier.size(28.dp)
                     )
                 }
-                
-                IconButton(onClick = { showBottomSheet = true }) {
+
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (isFavorite) Color(0xFFFFE4E6) else Color(0xFFF3F4F6)
+                        )
+                        .clickable {
+                            isFavorite = !isFavorite
+                            scope.launch {
+                                viewModel.toggleFavorite(currentTrack, isFavorite)
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add to playlist",
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.primary
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Избранное",
+                        tint = if (isFavorite) Color(0xFFE11D48) else Color(0xFF9CA3AF),
+                        modifier = Modifier.size(28.dp)
                     )
                 }
             }
-        }
-        
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showBottomSheet = false },
-                sheetState = sheetState
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                LazyColumn(
+                Column(modifier = Modifier.padding(16.dp)) {
+                    TrackInfoRow("Длительность", currentTrack.trackTime)
+                    if (currentTrack.collectionName.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TrackInfoRow("Альбом", currentTrack.collectionName)
+                    }
+                    if (currentTrack.primaryGenreName.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TrackInfoRow("Жанр", currentTrack.primaryGenreName)
+                    }
+                    if (currentTrack.country.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TrackInfoRow("Страна", currentTrack.country)
+                    }
+                }
+            }
+        }
+
+        if (showSheet) {
+            val sheetState = rememberModalBottomSheetState()
+            ModalBottomSheet(
+                onDismissRequest = { showSheet = false },
+                sheetState = sheetState,
+                containerColor = Color.White
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(bottom = 24.dp)
                 ) {
-                    item {
+                    Text(
+                        text = "Добавить в плейлист",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF1A1B22)
+                    )
+
+                    if (playlists.isEmpty()) {
                         Text(
-                            "Добавить в плейлист",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                    }
-                    items(playlists) { playlist ->
-                        Row(
+                            text = "Нет доступных плейлистов",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable {
-                                    scope.launch {
-                                        viewModel.insertTrackToPlaylist(track, playlist.id)
-                                        showBottomSheet = false
+                                .padding(32.dp),
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            color = Color(0xFF9CA3AF)
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            items(playlists) { playlist ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            scope.launch {
+                                                viewModel.insertTrackToPlaylist(currentTrack, playlist.id)
+                                                showSheet = false
+                                            }
+                                        }
+                                        .padding(vertical = 12.dp, horizontal = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(Color(0xFFE8E8E8)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.MusicNote,
+                                            contentDescription = null,
+                                            tint = Color(0xFFB5B5B6),
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column {
+                                        Text(
+                                            text = playlist.name,
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = Color(0xFF1A1B22)
+                                        )
+                                        Text(
+                                            text = "${playlist.tracks.size} треков",
+                                            fontSize = 12.sp,
+                                            color = Color(0xFF9CA3AF)
+                                        )
                                     }
                                 }
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text(playlist.name, fontSize = 16.sp)
-                                Text("${playlist.tracks.size} tracks", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                HorizontalDivider(color = Color(0xFFF3F4F6))
                             }
                         }
-                        HorizontalDivider()
                     }
                 }
             }
@@ -176,3 +295,25 @@ fun TrackDetailsScreen(
     }
 }
 
+@Composable
+private fun TrackInfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontSize = 13.sp,
+            color = Color(0xFF9CA3AF)
+        )
+        Text(
+            text = value,
+            fontSize = 13.sp,
+            color = Color(0xFF1A1B22),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 200.dp)
+        )
+    }
+}
