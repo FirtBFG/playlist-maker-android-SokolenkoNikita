@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,13 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Track
 import com.example.myapplication.ui.playlists.PlaylistsViewModel
+import com.example.myapplication.ui.search.components.TrackListItem
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable
 fun FavoritesScreen(
@@ -39,6 +39,7 @@ fun FavoritesScreen(
     val headerHeight = 80.dp
     val cornerRadius = 16.dp
     val favoriteTracks by viewModel.favoriteList.collectAsState(initial = emptyList())
+    val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Box(
@@ -109,11 +110,17 @@ fun FavoritesScreen(
                         .padding(horizontal = 16.dp)
                         .padding(top = 8.dp)
                 ) {
-                    items(favoriteTracks) { track ->
-                        FavoriteTrackListItem(
-                            track = track,
-                            onClick = { onTrackClick(track) }
+                    items(favoriteTracks.size) { index ->
+                        TrackListItem(
+                            track = favoriteTracks[index],
+                            onClick = { onTrackClick(favoriteTracks[index]) },
+                            onLongClick = {
+                                scope.launch {
+                                    viewModel.toggleFavorite(favoriteTracks[index], false)
+                                }
+                            }
                         )
+                        HorizontalDivider(thickness = 0.5.dp)
                     }
                 }
             }
@@ -121,82 +128,3 @@ fun FavoritesScreen(
     }
 }
 
-@Composable
-private fun FavoriteTrackListItem(
-    track: Track,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(61.dp)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (track.artworkUrl100.isNotBlank()) {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA))
-                ) {
-                    AsyncImage(
-                        model = track.artworkUrl100,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                        placeholder = painterResource(R.drawable.ic_music),
-                        error = painterResource(R.drawable.ic_music)
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MusicNote,
-                        contentDescription = null,
-                        tint = Color(0xFFB5B5B6),
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-            Spacer(Modifier.width(10.dp))
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = track.trackName,
-                    fontSize = 16.sp,
-                    color = Color(0xFF111827),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = track.artistName,
-                    fontSize = 11.sp,
-                    color = Color(0xFFB0B1B5),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-        Icon(
-            imageVector = Icons.Outlined.ChevronRight,
-            contentDescription = null,
-            tint = Color(0xFFB5B5B6),
-            modifier = Modifier.size(24.dp)
-        )
-    }
-}

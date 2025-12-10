@@ -185,7 +185,10 @@ fun PlaylistScreen(
 
                     // Список треков
                     items(currentPlaylist.tracks) { track ->
-                        TrackListItem(track = track, onTrackClick = onTrackClick)
+                        TrackListItem(
+                            track = track,
+                            onClick = { onTrackClick(track) }
+                        )
                     }
                 }
             } else {

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Track
+import com.example.myapplication.ui.search.components.TrackListItem
 import com.example.myapplication.ui.search.state.SearchState
 import com.example.myapplication.ui.search.viewModel.SearchViewModel
 
@@ -381,102 +382,5 @@ private fun SearchErrorScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun TrackListItem(
-    track: Track,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(61.dp)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (track.artworkUrl100.isNotBlank()) {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA))
-                ) {
-                    AsyncImage(
-                        model = track.artworkUrl100,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                        placeholder = painterResource(R.drawable.ic_music),
-                        error = painterResource(R.drawable.ic_music)
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFEAEAEA)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MusicNote,
-                        contentDescription = null,
-                        tint = Color(0xFFB5B5B6),
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-            Spacer(Modifier.width(10.dp))
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = track.trackName,
-                    fontSize = 16.sp,
-                    color = Color(0xFF111827),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(2.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val secondary = Color(0xFFB0B1B5)
-                    Text(
-                        text = track.artistName,
-                        fontSize = 11.sp,
-                        color = secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = " \u2022 ",
-                        fontSize = 11.sp,
-                        color = secondary
-                    )
-                    Text(
-                        text = track.trackTime,
-                        fontSize = 11.sp,
-                        color = secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-        Icon(
-            imageVector = Icons.Outlined.ChevronRight,
-            contentDescription = null,
-            tint = Color(0xFFB5B5B6),
-            modifier = Modifier.size(24.dp)
-        )
     }
 }
