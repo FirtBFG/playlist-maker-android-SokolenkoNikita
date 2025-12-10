@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -19,11 +20,11 @@ import kotlinx.coroutines.launch
 class PlaylistsViewModel() : ViewModel() {
     private val playlistsRepository: PlaylistsRepository = PlaylistsRepositoryImpl(scope = viewModelScope)
     private val tracksRepository: TracksRepository = TracksRepositoryImpl(scope = viewModelScope)
-    
+
     private var _coverImageUri = MutableStateFlow<String?>(null)
-    
+
     val coverImageUri = _coverImageUri.asStateFlow()
-    
+
     fun setCoverImageUri(uri: String?) {
         _coverImageUri.value = uri
     }
@@ -74,5 +75,15 @@ class PlaylistsViewModel() : ViewModel() {
     fun getTrackFromDb(track: Track): Flow<Track?> {
         return tracksRepository.getTrackByNameAndArtist(track)
     }
-}
 
+    suspend fun mergePlaylists(sourcePlaylistId: Long, targetPlaylistId: Long): String? {
+        return kotlinx.coroutines.withContext(Dispatchers.IO) {
+            val sourcePlaylist = playlistsRepository.getPlaylist(sourcePlaylistId).first()
+            val targetPlaylist = playlistsRepository.getPlaylist(targetPlaylistId).first()
+            if (sourcePlaylist != null && targetPlaylist != null) {
+                playlistsRepository.mergePlaylists(sourcePlaylistId, targetPlaylistId)
+                "${sourcePlaylist.name} слит с ${targetPlaylist.name}"
+            } else null
+        }
+    }
+}

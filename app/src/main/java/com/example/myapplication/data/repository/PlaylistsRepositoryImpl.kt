@@ -74,6 +74,14 @@ class PlaylistsRepositoryImpl(
         trackDao.clearTracksByPlaylistId(id)
         playlistDao.deletePlaylistById(id)
     }
+
+    override suspend fun mergePlaylists(sourcePlaylistId: Long, targetPlaylistId: Long) {
+        val sourceTracks = trackDao.getTracksByPlaylistId(sourcePlaylistId).first()
+        sourceTracks.forEach { trackEntity ->
+            trackDao.insertTrack(trackEntity.copy(playlistId = targetPlaylistId))
+        }
+        playlistDao.deletePlaylistById(sourcePlaylistId)
+    }
 }
 
 private fun com.example.myapplication.data.database.TrackEntity.toTrack(): Track {
