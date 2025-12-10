@@ -3,5 +3,9 @@ package com.example.myapplication.ui.navigation
 enum class ScreenEnum {
     MainScreen,
     SearchScreen,
-    SettingsScreen
+    SettingsScreen,
+    PlaylistsScreen,
+    CreatePlaylistScreen,
+    FavoritesScreen,
+    TrackDetailsScreen
 }

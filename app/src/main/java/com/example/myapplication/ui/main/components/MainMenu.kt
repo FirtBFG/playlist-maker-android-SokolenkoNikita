@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.main.components
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,8 +22,12 @@ import com.example.myapplication.R
 import com.example.myapplication.ui.theme.PlaylistmakerandroidTheme
 
 @Composable
-fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit) {
-    val context = LocalContext.current
+fun MainMenu(
+    onSettingsClickAction: () -> Unit,
+    onSearchClickAction: () -> Unit,
+    onPlaylistsClickAction: () -> Unit,
+    onFavoritesClickAction: () -> Unit
+) {
     Box(
         modifier = Modifier
             .padding(top = 14.dp)
@@ -44,24 +46,12 @@ fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit)
             MenuColumnItem(
                 icon = Icons.Filled.LibraryMusic,
                 text = stringResource(id = R.string.playlists),
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "Нажата кнопка \"Плейлисты\"",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                onClick = onPlaylistsClickAction
             )
             MenuColumnItem(
                 icon = Icons.Default.FavoriteBorder,
                 text = stringResource(id = R.string.saved),
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "Нажата кнопка \"Избранное\"",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                onClick = onFavoritesClickAction
             )
             MenuColumnItem(
                 icon = Icons.Default.Settings,
@@ -76,6 +66,6 @@ fun MainMenu(onSettingsClickAction: () -> Unit, onSearchClickAction: () -> Unit)
 @Composable
 fun MainMenuPreview() {
     PlaylistmakerandroidTheme(darkTheme = false) {
-        MainMenu({},{})
+        MainMenu({},{},{},{})
     }
 }

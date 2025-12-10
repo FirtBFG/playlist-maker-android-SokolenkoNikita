@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.myapplication.R
+import com.example.myapplication.domain.models.Track
 import com.example.myapplication.ui.search.components.EmptySearchBox
 import com.example.myapplication.ui.search.components.ErrorSearchBox
 import com.example.myapplication.ui.search.components.InitialSearchBox
@@ -32,7 +33,8 @@ import com.example.myapplication.ui.search.viewModel.SearchViewModel
 @Composable
 fun SearchScreen(
     onBackClickAction: () -> Unit,
-    viewModel: SearchViewModel
+    viewModel: SearchViewModel,
+    onTrackClick: (Track) -> Unit = {}
 ) {
     val screenState by viewModel.searchScreenState.collectAsState()
     var searchText by rememberSaveable { mutableStateOf("") }
@@ -71,7 +73,7 @@ fun SearchScreen(
                 }
                 is SearchState.Success -> {
                     val tracks = (screenState as SearchState.Success).foundList
-                    TrackList(tracks)
+                    TrackList(tracks = tracks, onTrackClick = onTrackClick)
                 }
                 is SearchState.EmptyList -> {
                     EmptySearchBox()
@@ -82,21 +84,5 @@ fun SearchScreen(
                 }
             }
         }
-    }
-}
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun PanelSearchPreview() {
-    PlaylistmakerandroidTheme(darkTheme = false) {
-        PanelSearch(
-            onTrailingIconClickAction = {},
-            onValueChange = {},
-            onLendingIconClickAction = {},
-            searchText = "aboba"
-        )
     }
 }
