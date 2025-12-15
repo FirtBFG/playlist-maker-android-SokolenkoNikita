@@ -4,12 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,9 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
@@ -32,6 +25,7 @@ import com.example.myapplication.ui.search.components.TrackList
 import com.example.myapplication.ui.search.state.SearchState
 import com.example.myapplication.ui.search.viewModel.SearchViewModel
 import com.example.myapplication.ui.theme.YPLightGray
+import androidx.compose.runtime.getValue
 
 @Composable
 fun SearchScreen(
@@ -39,7 +33,7 @@ fun SearchScreen(
     viewModel: SearchViewModel,
     onTrackClick: (Track) -> Unit = {}
 ) {
-    var searchQuery by remember { mutableStateOf("") }
+    val searchQuery by viewModel.searchQuery.collectAsState()
     val screenState by viewModel.searchScreenState.collectAsState()
     
     LaunchedEffect(Unit) {
@@ -83,10 +77,10 @@ fun SearchScreen(
                     }
                     PanelSearch(
                         searchText = searchQuery,
-                        onValueChange = { searchQuery = it },
+                        onValueChange = { viewModel.updateSearchQuery(it) },
                         onLendingIconClickAction = { viewModel.search(searchQuery) },
                         onTrailingIconClickAction = {
-                            searchQuery = ""
+                            viewModel.updateSearchQuery("")
                             viewModel.clearState()
                         },
                         modifier = Modifier.clip(searchBoxShape)
@@ -125,7 +119,7 @@ fun SearchScreen(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .clickable {
-                                                            searchQuery = query
+                                                            viewModel.updateSearchQuery(query)
                                                             viewModel.search(query)
                                                         }
                                                         .padding(vertical = 12.dp, horizontal = 16.dp),

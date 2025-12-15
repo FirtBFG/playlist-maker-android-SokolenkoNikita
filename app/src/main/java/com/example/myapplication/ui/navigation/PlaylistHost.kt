@@ -19,7 +19,6 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import com.google.gson.Gson
-
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.myapplication.ui.playlists.screen.PlaylistScreen
@@ -30,7 +29,6 @@ fun PlaylistHost(
     startDestination: String = ScreenEnum.MainScreen.name,
 ) {
     val navController = rememberNavController()
-    // Shared ViewModel for playlists functionality across screens
     val playlistsViewModel: PlaylistsViewModel = viewModel()
     val gson = Gson()
 

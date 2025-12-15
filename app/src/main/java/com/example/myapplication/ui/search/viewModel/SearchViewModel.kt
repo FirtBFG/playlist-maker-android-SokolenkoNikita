@@ -8,12 +8,16 @@ import com.example.myapplication.domain.api.SearchHistoryRepository
 import com.example.myapplication.domain.api.TrackRepository
 import com.example.myapplication.ui.search.state.SearchState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+@OptIn(FlowPreview::class)
 class SearchViewModel(
     private val trackRepository: TrackRepository,
     private val searchHistoryRepository: SearchHistoryRepository
@@ -24,9 +28,19 @@ class SearchViewModel(
     val searchHistory = _searchHistory.asStateFlow()
     private var lastQuery: String = ""
     private var lastFailedQuery: String = ""
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
     init {
         loadSearchHistory()
+
+        viewModelScope.launch {
+            _searchQuery
+                .debounce(3_000)
+                .collectLatest { query ->
+                    search(query)
+                }
+        }
     }
 
     private fun loadSearchHistory() {
@@ -34,6 +48,10 @@ class SearchViewModel(
             val history = searchHistoryRepository.getEntries()
             _searchHistory.update { history }
         }
+    }
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
     }
 
     fun search(whatSearch: String) {
@@ -60,7 +78,7 @@ class SearchViewModel(
 
     fun retryLastFailed() {
         if (lastFailedQuery.isNotBlank()) {
-            search(lastFailedQuery)
+            updateSearchQuery(lastFailedQuery)
         }
     }
 
