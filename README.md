@@ -49,3 +49,4 @@ cd <repository>
 ```
 ./gradlew assembleDebug
 ```
+---
