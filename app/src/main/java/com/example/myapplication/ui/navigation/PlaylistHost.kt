@@ -6,12 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.domain.models.Track
-import com.example.myapplication.ui.details.TrackDetailsScreen
+import com.example.myapplication.ui.details.screen.TrackDetailsScreen
 import com.example.myapplication.ui.favorites.FavoritesScreen
 import com.example.myapplication.ui.main.MainScreen
-import com.example.myapplication.ui.playlists.CreatePlaylistScreen
-import com.example.myapplication.ui.playlists.PlaylistsScreen
-import com.example.myapplication.ui.playlists.PlaylistsViewModel
+import com.example.myapplication.ui.playlists.screen.CreatePlaylistScreen
+import com.example.myapplication.ui.playlists.screen.PlaylistsScreen
+import com.example.myapplication.ui.playlists.viewModel.PlaylistsViewModel
 import com.example.myapplication.ui.search.screen.SearchScreen
 import com.example.myapplication.ui.search.viewModel.SearchViewModel
 import com.example.myapplication.ui.settings.SettingsScreen
@@ -19,18 +19,16 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import com.google.gson.Gson
-
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.myapplication.ui.playlists.PlaylistScreen
-import com.example.myapplication.ui.playlists.PlaylistViewModel
+import com.example.myapplication.ui.playlists.screen.PlaylistScreen
+import com.example.myapplication.ui.playlists.viewModel.PlaylistViewModel
 
 @Composable
 fun PlaylistHost(
     startDestination: String = ScreenEnum.MainScreen.name,
 ) {
     val navController = rememberNavController()
-    // Shared ViewModel for playlists functionality across screens
     val playlistsViewModel: PlaylistsViewModel = viewModel()
     val gson = Gson()
 

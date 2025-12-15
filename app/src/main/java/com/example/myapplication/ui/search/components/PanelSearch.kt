@@ -34,6 +34,7 @@ fun PanelSearch(
     onValueChange: (value: String) -> Unit,
     onTrailingIconClickAction: () -> Unit,
     onLendingIconClickAction: () -> Unit,
+    modifier: Modifier = Modifier,
     onSearch: () -> Unit = onLendingIconClickAction
 ) {
     Box(
@@ -42,10 +43,8 @@ fun PanelSearch(
         contentAlignment = Alignment.Center,
     ) {
         OutlinedTextField(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = YPLightGray),
             value = searchText,
             onValueChange = {value -> onValueChange(value)},

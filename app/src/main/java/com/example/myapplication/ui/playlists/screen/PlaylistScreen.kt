@@ -1,15 +1,12 @@
-package com.example.myapplication.ui.playlists
+package com.example.myapplication.ui.playlists.screen
 
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -29,28 +26,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Track
+import com.example.myapplication.ui.components.PanelHeader
+import com.example.myapplication.ui.playlists.helpers.calculateTotalMinutes
+import com.example.myapplication.ui.playlists.helpers.getTracksDeclension
+import com.example.myapplication.ui.playlists.viewModel.PlaylistViewModel
 import com.example.myapplication.ui.search.components.TrackListItem
-import java.util.Calendar
-
-private fun calculateTotalMinutes(tracks: List<Track>): Int {
-    return tracks.sumOf {
-        val parts = it.trackTime.split(":")
-        if (parts.size == 2) {
-            parts[0].toInt()
-        } else 0
-    }
-}
-
-private fun getTracksDeclension(count: Int): String {
-    val lastDigit = count % 10
-    val lastTwoDigits = count % 100
-    return when {
-        lastTwoDigits in 11..14 -> "$count треков"
-        lastDigit == 1 -> "$count трек"
-        lastDigit in 2..4 -> "$count трека"
-        else -> "$count треков"
-    }
-}
 
 @Composable
 fun PlaylistScreen(
@@ -59,45 +39,22 @@ fun PlaylistScreen(
     onTrackClick: (Track) -> Unit
 ) {
     val playlist by playlistViewModel.playlist.collectAsState(initial = null)
-    val headerHeight = 80.dp
-    val cornerRadius = 16.dp
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFEBEBEB))) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight + cornerRadius)
-                .background(color = Color(0xFFEBEBEB))
-                .padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Назад",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable(onClick = onBackClick)
-                )
-                Spacer(modifier = Modifier.width(28.dp))
-                Text(
-                    text = playlist?.name ?: "Плейлист",
-                    color = Color.Black,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
-        }
-
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            PanelHeader(
+                title = stringResource(R.string.playlists),
+                onClickAction = onBackClick
+            )
+        },
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = headerHeight)
+                .padding(innerPadding)
         ) {
             if (playlist != null) {
                 val currentPlaylist = playlist!!
@@ -159,7 +116,7 @@ fun PlaylistScreen(
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
-                            
+
                             if (currentPlaylist.description.isNotEmpty()) {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
@@ -168,10 +125,8 @@ fun PlaylistScreen(
                                     color = Color.Black
                                 )
                             }
-                            
+
                             Spacer(modifier = Modifier.height(8.dp))
-                            
-                            val creationYear = currentPlaylist.creationYear ?: Calendar.getInstance().get(Calendar.YEAR)
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
@@ -222,5 +177,5 @@ fun PlaylistScreen(
             }
         }
     }
-}
+    }
 

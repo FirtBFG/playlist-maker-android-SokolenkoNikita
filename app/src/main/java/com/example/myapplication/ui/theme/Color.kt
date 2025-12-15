@@ -16,4 +16,4 @@ val Blue30 = Blue40.copy(alpha = 0.48f)
 val YPLightGray = Color(0xFFE6E8EB)
 val YPTextGray = Color(0xFFAEAFB4)
 
-
+val FloatingButtonColor = Color(0xFFC5C5C7)

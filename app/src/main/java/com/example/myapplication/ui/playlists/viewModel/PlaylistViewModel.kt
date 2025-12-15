@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.playlists
+package com.example.myapplication.ui.playlists.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,9 +11,10 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistViewModel(
     private val playlistId: Long
 ) : ViewModel() {
-    
-    private val playlistsRepository: PlaylistsRepository = PlaylistsRepositoryImpl(scope = viewModelScope)
-    
+
+    private val playlistsRepository: PlaylistsRepository =
+        PlaylistsRepositoryImpl(scope = viewModelScope)
+
     val playlist: Flow<Playlist?> = playlistsRepository.getPlaylist(playlistId)
 
     companion object {
@@ -26,4 +27,3 @@ class PlaylistViewModel(
             }
     }
 }
-

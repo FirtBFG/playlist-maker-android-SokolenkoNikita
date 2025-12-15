@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.domain.models.Track
-import com.example.myapplication.ui.playlists.PlaylistsViewModel
+import com.example.myapplication.ui.playlists.viewModel.PlaylistsViewModel
 import com.example.myapplication.ui.search.components.TrackListItem
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
+import com.example.myapplication.ui.components.PanelHeader
 
 @Composable
 fun FavoritesScreen(
@@ -36,48 +38,25 @@ fun FavoritesScreen(
     onBackClick: () -> Unit,
     onTrackClick: (Track) -> Unit
 ) {
-    val headerHeight = 80.dp
-    val cornerRadius = 16.dp
     val favoriteTracks by viewModel.favoriteList.collectAsState(initial = emptyList())
     val scope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight + cornerRadius)
-                .background(color = Color.White)
-                .padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Назад",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable(onClick = onBackClick)
-                )
-                Spacer(modifier = Modifier.width(28.dp))
-                Text(
-                    text = "Избранные треки",
-                    color = Color.Black,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
-        }
-
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            PanelHeader(
+                title = stringResource(R.string.favourites),
+                onClickAction = onBackClick
+            )
+        },
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = headerHeight + 3.dp)
-                .background(Color.White)
+                .padding(innerPadding)
+                .padding(top = 3.dp)
         ) {
             if (favoriteTracks.isEmpty()) {
                 Box(
@@ -97,7 +76,7 @@ fun FavoritesScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "В избранном пока ничего нет",
+                            text = stringResource(R.string.favourites_empty),
                             color = Color.Black,
                             fontSize = 16.sp
                         )
@@ -126,5 +105,6 @@ fun FavoritesScreen(
             }
         }
     }
+
 }
 
