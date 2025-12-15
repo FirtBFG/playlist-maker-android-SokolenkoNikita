@@ -1,11 +1,12 @@
 package com.example.myapplication.ui.search.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,42 +19,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 
 @Composable
-fun ErrorSearchBox(error: String, onRetry: () -> Unit) {
+fun SearchErrorScreen(
+    error: String,
+    onRetry: () -> Unit
+) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 24.dp),
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 120.dp)
-                    .padding(top = 102.dp)
-                    .size(120.dp),
-                painter = painterResource(R.drawable.ic_no_connection),
-                contentDescription = stringResource(R.string.no_connection_desc)
+                painter = painterResource(id = R.drawable.ic_no_connection),
+                contentDescription = null,
+                modifier = Modifier.size(120.dp)
             )
-            Spacer(modifier = Modifier.padding(top = 16.dp))
-            Text(
-                text = stringResource(R.string.error),
-                fontWeight = FontWeight.Bold,
-                fontSize = 19.sp,
-            )
-            Spacer(modifier = Modifier.padding(top = 16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = error,
-                fontWeight = FontWeight.Bold,
-                fontSize = 19.sp,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                color = Color.Black,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-            Spacer(modifier = Modifier.padding(top = 24.dp))
             Button(
                 onClick = onRetry,
                 colors = ButtonDefaults.buttonColors(
@@ -62,7 +59,7 @@ fun ErrorSearchBox(error: String, onRetry: () -> Unit) {
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.refresh),
+                    text = stringResource(R.string.update),
                     color = Color.White,
                     fontSize = 16.sp
                 )

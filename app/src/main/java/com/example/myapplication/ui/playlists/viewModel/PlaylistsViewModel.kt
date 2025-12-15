@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.playlists
+package com.example.myapplication.ui.playlists.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,9 +16,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlaylistsViewModel() : ViewModel() {
-    private val playlistsRepository: PlaylistsRepository = PlaylistsRepositoryImpl(scope = viewModelScope)
+    private val playlistsRepository: PlaylistsRepository =
+        PlaylistsRepositoryImpl(scope = viewModelScope)
     private val tracksRepository: TracksRepository = TracksRepositoryImpl(scope = viewModelScope)
 
     private var _coverImageUri = MutableStateFlow<String?>(null)
@@ -77,7 +79,7 @@ class PlaylistsViewModel() : ViewModel() {
     }
 
     suspend fun mergePlaylists(sourcePlaylistId: Long, targetPlaylistId: Long): String? {
-        return kotlinx.coroutines.withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             val sourcePlaylist = playlistsRepository.getPlaylist(sourcePlaylistId).first()
             val targetPlaylist = playlistsRepository.getPlaylist(targetPlaylistId).first()
             if (sourcePlaylist != null && targetPlaylist != null) {
