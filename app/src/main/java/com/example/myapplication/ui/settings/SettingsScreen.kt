@@ -54,9 +54,9 @@ fun SettingsScreen(onBackClickAction: () -> Unit) {
 fun SettingsColumn(viewModel: SettingsViewModel) {
     val context = LocalContext.current
     val shareAppText = stringResource(id = R.string.share_app)
-    val typeSupportText = stringResource(id = R.string.type_support)
+    val typeSupportText = stringResource(id = R.string.support_mail_text)
     val titleSupportText = stringResource(id = R.string.support_mail_title)
-    val supportEmail = stringResource(id = R.string.support_mail_text)
+    val supportEmail = stringResource(id = R.string.support_email)
     val offerRef = stringResource(id = R.string.offer_ref).toUri()
 
     var isDark by rememberSaveable { mutableStateOf(false) }

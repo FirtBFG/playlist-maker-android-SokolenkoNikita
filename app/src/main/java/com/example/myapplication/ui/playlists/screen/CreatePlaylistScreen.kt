@@ -42,7 +42,8 @@ fun CreatePlaylistScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            viewModel.setCoverImageUri(it.toString())
+            val savedPath = viewModel.saveCoverImage(context, uri)
+            viewModel.setCoverImageUri(savedPath)
         }
     }
     
