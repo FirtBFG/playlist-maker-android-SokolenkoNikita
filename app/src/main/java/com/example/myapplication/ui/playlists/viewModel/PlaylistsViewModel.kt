@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.playlists.viewModel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.repository.PlaylistsRepositoryImpl
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class PlaylistsViewModel() : ViewModel() {
     private val playlistsRepository: PlaylistsRepository =
@@ -29,6 +32,17 @@ class PlaylistsViewModel() : ViewModel() {
 
     fun setCoverImageUri(uri: String?) {
         _coverImageUri.value = uri
+    }
+
+    fun saveCoverImage(context: Context, uri: Uri): String {
+        val input = context.contentResolver.openInputStream(uri)!!
+        val file = File(context.filesDir, "playlist_${System.currentTimeMillis()}.jpg")
+
+        file.outputStream().use { output ->
+            input.copyTo(output)
+        }
+
+        return file.absolutePath
     }
 
     val playlists: Flow<List<Playlist>> = flow {
