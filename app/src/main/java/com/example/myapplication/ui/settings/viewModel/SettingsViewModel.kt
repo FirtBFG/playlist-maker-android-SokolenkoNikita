@@ -17,8 +17,7 @@ class SettingsViewModel : ViewModel() {
 
     fun onHelp(context: Context, email: String, title: String, text: String) {
         val helpIntent = Intent(Intent.ACTION_SENDTO)
-        helpIntent.data = "mailto:".toUri()
-        helpIntent.putExtra(Intent.EXTRA_EMAIL, email)
+        helpIntent.data = "mailto:${email}".toUri()
         helpIntent.putExtra(Intent.EXTRA_TITLE, title)
         helpIntent.putExtra(Intent.EXTRA_TEXT, text)
         context.startActivity(helpIntent)
